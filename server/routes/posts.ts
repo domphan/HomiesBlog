@@ -27,6 +27,11 @@ router.post('/', [
     post.createPost(req, res, next);
 });
 
+router.get('/', passport.authenticate('jwt', { session: false }),
+    (req: Request, res: Response, next: NextFunction) => {
+        post.getAllPostsFromUser(req, res, next);
+    });
+
 // Get a post
 router.get('/:id', passport.authenticate('jwt', { session: false }),
     (req: Request, res: Response, next: NextFunction) => {

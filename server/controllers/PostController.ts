@@ -1,7 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { BAD_REQUEST } from 'http-status-codes';
-import { BaseController } from './base';
 import { PostPatchInterface } from '../common/types';
+import { BaseController } from './base';
+import { omit } from 'lodash';
 
 export class PostController extends BaseController {
 
@@ -18,6 +19,16 @@ export class PostController extends BaseController {
         return res.json(newPost);
     }
 
+    public getAllPostsFromUser = async (req: Request, res: Response, next: NextFunction) => {
+        const userId = req.user[0].id;
+        const posts = await this.db.post.createQueryBuilder('post')
+            .leftJoinAndSelect('post.user', 'user')
+            .where('user.id = :id', { id: userId })
+            .getMany()
+            .catch((err: any) => next(err));
+        res.json(posts);
+    }
+
     public getPost = async (req: Request, res: Response, next: NextFunction) => {
         const post = await this.db.post.findOneOrFail(req.params.id)
             .catch((err: any) => {
@@ -25,8 +36,6 @@ export class PostController extends BaseController {
             });
         return res.json(post);
     }
-    // get all of user's posts
-    // get all of user's friend's posts
 
     public deletePost = async (req: Request, res: Response, next: NextFunction) => {
         const post = await this.db.post.findOneOrFail(req.params.id)
@@ -38,15 +47,14 @@ export class PostController extends BaseController {
 
     public updatePost = async (req: Request, res: Response, next: NextFunction) => {
         const userId = req.user[0].id;
-        // confirm user owns post
         const owner = await this.db.post.createQueryBuilder('post')
             .leftJoinAndSelect('post.user', 'user')
             .where('user.id = :id', { id: userId })
             .andWhere('post.id = :postId', { postId: req.params.id })
             .getOne()
             .catch((err: any) => res.status(BAD_REQUEST).json({ error: 'post cannot be found' }));
-        await req.body.map((x: PostPatchInterface) => {
-            this._patch(x.op, x.path, x.value, req.params.id)
+        await req.body.map((patchOptions: PostPatchInterface) => {
+            this._patch(patchOptions.op, patchOptions.path, patchOptions.value, req.params.id)
                 .catch((err: any) => res.status(BAD_REQUEST).json({ error: err.message }));
         });
         res.json(await this.db.post.findOneOrFail(req.params.id));

@@ -4,12 +4,12 @@ import { Response, Request, NextFunction } from 'express';
 import { BAD_REQUEST, UNAUTHORIZED, ACCEPTED } from 'http-status-codes';
 import { BaseController } from './base';
 import { UserRequestInterface } from '../common/types';
+import { runInNewContext } from 'vm';
 
 //todo: fix try catches, remove more stuff from payload
 export class UserController extends BaseController {
 
     public whoIs = async (req: UserRequestInterface, res: Response, next: NextFunction) => {
-        await console.log(req.user);
         const user = await this.db.user.findOne(req.user[0].id);
         res.json(user);
     }
@@ -46,21 +46,28 @@ export class UserController extends BaseController {
     public login = async (req: Request, res: Response, next: NextFunction) => {
         const { username, password } = req.body;
         const user = await this.db.user.findOneOrFail({ username })
-            .catch((err: any) => res.status(BAD_REQUEST).json({ error: 'user not found' }));
+            .catch((err: any) => {
+                res.status(404).json({ error: 'user not found' })
+                next(err);
+            });
         const matching = await bcrypt.compare(password, user.password)
-            .catch((err: any) => res.status(BAD_REQUEST).json({ error: 'passwords do not match' }));
-        if (matching) {
-            const payload: object = {
-                id: user.id
-            };
-            const token: string = await jwt.sign(payload, 'secretsecret', {
-                expiresIn: 3600
+            .catch((err: any) => {
+                res.status(BAD_REQUEST).json({ error: 'passwords do not match' });
+                next(err);
             });
-            res.json({
-                success: true,
-                token: `Bearer ${token}`
-            });
+        if (!matching) {
+            return res.status(BAD_REQUEST).json({ error: 'passwords do not match' });
         }
+        const payload: object = {
+            id: user.id
+        };
+        const token: string = await jwt.sign(payload, 'secretsecret', {
+            expiresIn: 3600
+        });
+        res.json({
+            success: true,
+            token: `Bearer ${token}`
+        });
     }
 
 
@@ -70,10 +77,11 @@ export class UserController extends BaseController {
         // Check if oldPassword matches
         try {
             const user = await this.db.user.findOne({ id });
-            const matching = await bcrypt.compare(oldPassword, user.password);
+            const matching = await bcrypt.compare(oldPassword, user.password)
+
             if (!matching) {
                 // If it doesn't, send back error
-                res.status(UNAUTHORIZED).json({ error: 'old password not valid' })
+                return res.status(UNAUTHORIZED).json({ error: 'old password not valid' });
             }
             // Save new password in DB
             const hashedNewPassword = await this._hashPassword(newPassword)
@@ -81,6 +89,7 @@ export class UserController extends BaseController {
             res.status(ACCEPTED).json(user)
         } catch (err) {
             res.status(UNAUTHORIZED).json({ error: 'invalid auth' });
+            next(err);
         }
     }
 
@@ -97,7 +106,7 @@ export class UserController extends BaseController {
             return hashWord;
         } catch (err) {
             // TODO: Better error handling
-            console.error(`ERROR: ${err}`);
+            throw new Error('hash failed');
         }
     }
 }
