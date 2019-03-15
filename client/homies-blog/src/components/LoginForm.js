@@ -6,7 +6,7 @@ import { login } from '../actions/user_actions';
 import PropTypes from 'prop-types';
 import { Form, Field } from 'react-final-form';
 import { required, validEmail, minSix, composeValidators } from '../common/validation';
-import Grid from '@material-ui/core/Grid';
+import { GridList, Grid } from '@material-ui/core/';
 
 const LabelError = styled.span`
   color: red;
@@ -45,12 +45,11 @@ class LoginForm extends Component {
   render() {
     if (this.props.user.authenticated) {
       return (
-        //todo: do something with this.
         <h1>Login successful</h1>
       );
     }
     return (
-      <div>
+      <Grid padding={20}>
         <h1>Login</h1>
         <Form
           onSubmit={this.onSubmit}
@@ -71,7 +70,7 @@ class LoginForm extends Component {
             </form>
           )}
         />
-      </div>
+      </Grid>
     );
   }
 }

@@ -1,4 +1,3 @@
-//TODO: FIX POPPER
 import React, { Component, Fragment } from 'react'
 import { Link, withRouter } from 'react-router-dom'
 import styled from 'styled-components'
@@ -15,7 +14,6 @@ import {
 } from '@material-ui/core'
 import { logoutUser, clearErrors } from '../actions/user_actions';
 import { connect } from 'react-redux';
-import SearchIcon from '@material-ui/icons/Search'
 import { ErrorBanner } from '.';
 import { isEmpty } from 'lodash';
 import {
@@ -25,43 +23,40 @@ import {
 
 const buttonLight = indigo[200]
 
-const StyledButton = styled(Button)
-  `
-    color: #333945;
-    background: ${buttonLight};
-    opacity: 1.0;
-    margin: 2px;
+const StyledButton = styled(Button)`
+  color: #333945;
+  background: ${buttonLight};
+  opacity: 1.0;
+  margin: 2px;
 
-    &:hover {
-        background: ${indigo[100]};
-    }
-    `
-const StyledTab = styled(Tab)
-  `
-    color: white;
-    &:hover {
-        background: #74B9FF;
-    }
-    &:focus {
-        background: inherit;
-    }
-    `
-const BrandTypography = styled(Typography)
-  `
-    margin-right: 10px; 
-    `
-const GridContainer = styled(Grid)
-  `
+  &:hover {
+      background: ${indigo[100]};
+  }
+`
+const StyledTab = styled(Tab)`
+  color: white;
+  &:hover {
+      background: #74B9FF;
+  }
+  &:focus {
+      background: inherit;
+  }
+`
+const BrandTypography = styled(Typography)`
+  margin-right: 10px; 
+  font-family: "Trebuchet MS", Helvetica, sans-serif;
+  color: white;
+`
+const GridContainer = styled(Grid)`
     ${
-  breakpoint('tablet')
-    `
+  breakpoint('tablet')`
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
         padding
-    `
+  `
   }
-    `
+`
 
 class Navbar extends Component {
   constructor(props) {
@@ -96,10 +91,28 @@ class Navbar extends Component {
     );
   }
 
+  renderNavItems = () => {
+    return (
+      <Grid
+        item lg
+      >
+        <Tabs
+          value={this.state.index}   // first item is being underlined (selected) at value 0
+          indicatorColor='secondary'
 
-
-  buttonOnClick = async () => {
-    await this.props.logoutUser(this.props.history);
+        >
+          <Link to='/' onClick={() => this.handleClick(0)}>
+            <StyledTab label='Profile' />
+          </Link>
+          <Link to='/post' onClick={() => this.handleClick(1)}>
+            <StyledTab label='Create' />
+          </Link>
+          <Link to='/feed' onClick={() => this.handleClick(2)}>
+            <StyledTab label='Feed' />
+          </Link>
+        </Tabs>
+      </Grid>
+    );
   }
 
   render() {
@@ -118,30 +131,12 @@ class Navbar extends Component {
 
               <Grid item lg>
                 <BrandTypography
-                  variant='h4'
+                  variant='h5'
                 >
-                  Homies Blog
-                  </BrandTypography>
+                  HomiesBlog
+                </BrandTypography>
               </Grid>
-              <Grid
-                item lg
-              >
-                <Tabs
-                  value={this.state.index}   // first item is being underlined (selected) at value 0
-                  indicatorColor='secondary'
-
-                >
-                  <Link to='/' onClick={() => this.handleClick(0)}>
-                    <StyledTab label='Home' />
-                  </Link>
-                  <Link to='/post' onClick={() => this.handleClick(1)}>
-                    <StyledTab label='Post' />
-                  </Link>
-                  <Link to='/feed' onClick={() => this.handleClick(2)}>
-                    <StyledTab label='Feed' />
-                  </Link>
-                </Tabs>
-              </Grid>
+              {this.props.user.authenticated ? this.renderNavItems() : ''}
 
               <Grid item lg>
                 <Grid

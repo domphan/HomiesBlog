@@ -78,10 +78,12 @@ export const clearErrors = () => dispatch => {
 export const getUserInfo = () => async dispatch => {
   let response = await axios.get(`${URL}/api/users`)
     .catch(err => {
-      dispatch({
-        type: GET_ERRORS,
-        payload: err.response.data.error
-      });
+      if (err.response.data != 'Unauthorized') {
+        dispatch({
+          type: GET_ERRORS,
+          payload: err.response.data.error
+        });
+      }
     });
   if (response) {
     dispatch({

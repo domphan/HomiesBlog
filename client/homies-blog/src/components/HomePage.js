@@ -12,16 +12,10 @@ import {
   Grid,
 } from '@material-ui/core'
 
-const StyledContainer = styled.div
-  `
-  width: 80%;
-  margin: auto;
-  `
-const StyledTypography = styled(Typography)
-  `
+const StyledTypography = styled(Typography)`
   text-align: center;
   margin: 25px;
-  `
+`
 
 class HomePage extends Component {
   componentDidMount() {
@@ -31,7 +25,7 @@ class HomePage extends Component {
     const { classes } = this.props
     const { user } = this.props;
     return (
-      <StyledContainer>
+      <div>
         <StyledTypography
           variant='h1'
         >
@@ -45,7 +39,7 @@ class HomePage extends Component {
           justify='space-between'
           alignItems='stretch'
         >
-          <Grid item>
+          {/* <Grid item>
             <Weather />
           </Grid>
 
@@ -55,9 +49,9 @@ class HomePage extends Component {
 
           <Grid item>
             <EventForm />
-          </Grid>
+          </Grid> */}
         </Grid>
-      </StyledContainer>
+      </div>
     );
 
   }

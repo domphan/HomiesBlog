@@ -13,6 +13,7 @@ import { create } from "jss";
 import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
 import { logoutUser, setAuthToken, setCurrentUser } from './actions/user_actions';
 import jwt_decode from 'jwt-decode';
+import styled from 'styled-components';
 
 const generateClassName = createGenerateClassName();
 const jss = create({
@@ -47,7 +48,7 @@ ReactDOM.render(
         <div>
           <Navbar />
           <PopperContainer />
-          <Events />
+          {/* <Events /> */}
           <Switch>
             <Route path='/login' component={LoginForm} />
             <Route path='/signup' component={SignupForm} />
@@ -55,7 +56,7 @@ ReactDOM.render(
             <Route path="/feed" component={BlogFeed} />
             <Route path="/" component={HomePage} />
           </Switch>
-          <Footer />
+          {/* <Footer /> */}
         </div>
       </BrowserRouter>
     </Provider>

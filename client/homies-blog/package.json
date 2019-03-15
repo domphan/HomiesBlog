@@ -8,6 +8,7 @@
     "axios": "^0.18.0",
     "bootstrap": "^4.2.1",
     "final-form": "^4.11.1",
+    "final-form-material-ui": "^0.3.0",
     "i": "^0.3.6",
     "informed": "^1.10.12",
     "jwt-decode": "^2.2.0",

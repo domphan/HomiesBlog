@@ -1,122 +1,97 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux';
 import styled from 'styled-components'
+import { required } from '../common/validation';
 import {
-    TextField,
-    Paper,
-    Grid,
-    Button,
-    Typography,
+  Paper,
+  Grid,
+  Button,
+  Typography,
 } from '@material-ui/core'
-import {
+import { Form, Field } from 'react-final-form';
+import { TextField } from 'final-form-material-ui';
+import { createPost } from '../actions/post_actions';
+const LabelError = styled.span`
+  color: red;
+  font-size: 0.75rem;
+  justify-content: right;  
+`
 
-} from '@material-ui/icons'
+const LabelContainer = styled.label`
+  display:flex;
+  justify-content: space-between;
+`;
 
-const StyledPaper = styled(Paper)
-    `
-    padding: 20px;
-    margin-top: 30px;
-    `
+const StyledDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+const FormContainer = styled.div`
+  margin: auto;
+`
 
 class PostForm extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            mediaURl: '',
-            title: '',
-            body: '',
-        }
-    }
+  generateFields(name, validation, type, label, placeholder, textarea) {
+    return (
+      <Grid item lg={12}>
+        <Field name={name} validate={validation}>
+          {({ input, meta }) => (
+            <div>
+              <LabelContainer>
+                <label>{label}</label> {meta.error && meta.touched && <LabelError>{meta.error}</LabelError>}
+              </LabelContainer>
+              {textarea ? <textarea {...input} type={type} placeholder={placeholder} /> : <input {...input} type={type} placeholder={placeholder} />}
+            </div>
+          )}
+        </Field>
+      </Grid>
+    );
+  }
 
-    handleChange = (event) => {
-        const { name, value } = event.target
+  onSubmit = async (values) => {
+    await this.props.createPost(values, this.props.history);
+  }
 
-        this.setState({
-            [name]: value,
-        })
-    }
+  render() {
+    const { errors } = this.props;
 
-    handleSubmit = () => {
-        const { title, body } = this.state
+    return (
+      <StyledDiv>
+        <FormContainer>
+          <h1>Create Post</h1>
+          <Form
+            onSubmit={this.onSubmit}
+            render={({ handleSubmit, reset, submitting, pristine, values }) => (
+              <form onSubmit={handleSubmit} autoComplete='off'>
+                <Grid
+                  container
+                  spacing={16}
+                  direction='column'>
+                  {this.generateFields('title', required, 'text', 'title', 'cool descriptive title', false)}
+                  {this.generateFields('textContent', required, 'text', 'textContent', 'your life story', true)}
+                  {this.generateFields('mediaUrl', '', 'text', 'Media URL', 'www.reddit.com/post/1', false)}
+                </Grid>
+                <div className="buttons">
+                  <Button variant="contained" type="submit" color="primary" disabled={submitting}>
+                    Submit
+                </Button>
+                </div>
+                <pre>{JSON.stringify(values, 0, 2)}</pre>
+              </form>
+            )}
+          />
+        </FormContainer>
+      </StyledDiv>
+    );
 
-        alert(`You a snitch! Here's what you said:\nTitle: ${title}\nBody: ${body}`)
-        // POST via axios
-    }
-
-    render() {
-        const { title, body } = this.state
-
-        return (
-            <Grid md={6} style={{ margin: 'auto' }}>
-                <StyledPaper>
-                    <Typography
-                        variant='display1'
-                        align='center'
-                    >
-                        Make a Post
-                    </Typography>
-                    <Grid
-                        container
-                        md
-                        alignItems='center'
-                        justify='center'
-
-                    >
-                        <form onSubmit={this.handleSubmit}>
-                            <Grid
-                                container
-                                md={6}
-                                style={{ margin: 'auto' }}
-                            >
-                                <Grid item sm>
-                                    <TextField
-                                        label="Title"
-                                        helperText="Post Title"
-                                        variant="outlined"
-                                        margin="normal"
-
-                                        onChange={this.handleChange}
-                                        name='title'
-                                        value={title}
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Grid item sm>
-                                <TextField
-                                    label='Body'
-                                    helperText='Post Goes here'
-                                    variant='filled'
-                                    margin="dense"
-                                    multiline
-                                    rows='10'
-                                    rowsMax="20"
-                                    style={{ width: 400, overflowY: 'auto' }}
-
-                                    onChange={this.handleChange}
-                                    name='body'
-                                    value={body}
-                                />
-                            </Grid>
-                            <Grid
-                                container
-                                md
-                            >
-                                <Button
-                                    color='primary'
-                                    variant='contained'
-                                    size='large'
-                                    style={{ margin: 'auto' }}
-                                    onClick={this.handleSubmit}
-                                >
-                                    Post
-                                </Button>
-                            </Grid>
-                        </form>
-                    </Grid>
-                </StyledPaper>
-            </Grid>
-
-        )
-    }
+  }
 }
 
-export default PostForm
+const mapStateToProps = state => ({
+  user: state.user,
+  errors: state.errors,
+  post: state.post,
+})
+
+export default connect(mapStateToProps, { createPost })(PostForm);
