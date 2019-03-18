@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Comment, User } from './'
+import { Comment, User } from './';
 
 @Entity()
 export class Post {
@@ -21,7 +21,7 @@ export class Post {
 
     // todo: array of users
     @Column({ type: 'simple-array', default: '' })
-    likes: string[];
+    likes: User[];
 
     @OneToMany(type => Comment, comment => comment.post, {
         cascade: true

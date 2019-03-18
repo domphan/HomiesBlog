@@ -1,5 +1,5 @@
 import { BaseEntity, Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Comment, Post } from './'
+import { Comment, Post } from '.';
 
 @Entity()
 export class User {
@@ -34,6 +34,10 @@ export class User {
     @OneToMany(type => Comment, comment => comment.user, {
         cascade: true
     })
+
     @JoinColumn()
     comments: Comment[];
+
+    @JoinColumn()
+    friends: User[]
 }

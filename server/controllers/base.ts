@@ -1,5 +1,5 @@
 import { User, Post, Comment } from '../models/';
-import { getConnection, DatabaseType } from 'typeorm';
+import { getConnection } from 'typeorm';
 
 interface IDatabase {
     user: any;

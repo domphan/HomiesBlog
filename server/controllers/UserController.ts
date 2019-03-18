@@ -5,6 +5,8 @@ import { BAD_REQUEST, UNAUTHORIZED, ACCEPTED } from 'http-status-codes';
 import { BaseController } from './base';
 import { UserRequestInterface } from '../common/types';
 
+const ONE_DAY = 84600;
+
 //todo: fix try catches, remove more stuff from payload
 export class UserController extends BaseController {
 
@@ -59,7 +61,7 @@ export class UserController extends BaseController {
             id: user.id
         };
         const token: string = await jwt.sign(payload, 'secretsecret', {
-            expiresIn: 3600
+            expiresIn: ONE_DAY
         });
         res.json({
             success: true,

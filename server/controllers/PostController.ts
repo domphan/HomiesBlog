@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { BAD_REQUEST } from 'http-status-codes';
 import { PostPatchInterface } from '../common/types';
 import { BaseController } from './base';
-import { omit } from 'lodash';
+import { pick } from 'lodash';
 
 export class PostController extends BaseController {
 
@@ -26,7 +26,9 @@ export class PostController extends BaseController {
             .where('user.id = :id', { id: userId })
             .getMany()
             .catch((err: any) => next(err));
-        res.json(posts);
+        res.json(posts.map((post) => {
+            return pick(post, ['id', 'title', 'textContent', 'mediaUrl', 'likes', 'user.id']);
+        }));
     }
 
     public getPost = async (req: Request, res: Response, next: NextFunction) => {
