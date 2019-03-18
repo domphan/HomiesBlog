@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { getUserInfo } from '../actions/user_actions';
 import Weather from './Weather'
 import Mood from './Mood'
-import { SignupForm } from '.';
+import { SignupForm, PostForm } from '.';
 import breakpoint from 'styled-components-breakpoint'
 import {
   Typography,
@@ -32,24 +32,13 @@ class HomePage extends Component {
           {user.userinfo ? `Hello ${user.userinfo.firstName}` : 'make an account dude'}
         </StyledTypography>
 
-
+        <PostForm formType='Create' />
         <Grid
           container
           lg={12}
           justify='space-between'
           alignItems='stretch'
         >
-          {/* <Grid item>
-            <Weather />
-          </Grid>
-
-          <Grid item>
-            <Mood />
-          </Grid>
-
-          <Grid item>
-            <EventForm />
-          </Grid> */}
         </Grid>
       </div>
     );

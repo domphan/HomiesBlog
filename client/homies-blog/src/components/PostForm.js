@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core'
 import { Form, Field } from 'react-final-form';
 import { TextField } from 'final-form-material-ui';
-import { createPost } from '../actions/post_actions';
+import { createPost, updatePost } from '../actions/post_actions';
 const LabelError = styled.span`
   color: red;
   font-size: 0.75rem;
@@ -53,34 +53,81 @@ class PostForm extends Component {
     await this.props.createPost(values, this.props.history);
   }
 
-  render() {
-    const { errors } = this.props;
+  submitUpdate = async (values, dirtyFields) => {
+    const toBeUpdated = dirtyFields.getState().dirtyFields
+    const patchArray = [];
+    for (let key in toBeUpdated) {
+      patchArray.push({
+        path: `/${key}`,
+        op: 'replace',
+        value: `${values[key]}`
+      });
+    }
+    await this.props.updatePost(patchArray, values.id);
+    this.props.onSubmit();
+  }
 
+  renderCreate() {
+    return (
+      <Form
+        onSubmit={this.onSubmit}
+        render={({ handleSubmit, reset, submitting, pristine, values }) => (
+          <form onSubmit={handleSubmit} autoComplete='off'>
+            <Grid
+              container
+              spacing={16}
+              direction='column'>
+              {this.generateFields('title', required, 'text', 'title', 'cool descriptive title', false)}
+              {this.generateFields('textContent', required, 'text', 'textContent', 'your life story', true)}
+              {this.generateFields('mediaUrl', '', 'text', 'Media URL', 'www.reddit.com/post/1', false)}
+            </Grid>
+            <div className="buttons">
+              <Button variant="contained" type="submit" color="primary" disabled={submitting}>
+                Submit
+              </Button>
+            </div>
+            <pre>{JSON.stringify(values, 0, 2)}</pre>
+          </form>
+        )}
+      />
+    );
+  }
+
+  renderEdit(post) {
+    return (
+      <Form
+        onSubmit={this.submitUpdate}
+        initialValues={post}
+        render={({ handleSubmit, reset, submitting, pristine, values, dirtyFields }) => (
+          <form onSubmit={handleSubmit} autoComplete='off'>
+            <Grid
+              container
+              spacing={16}
+              direction='column'>
+              {this.generateFields('title', required, 'text', 'title', '', false)}
+              {this.generateFields('textContent', required, 'text', 'textContent', '', true)}
+              {this.generateFields('mediaUrl', '', 'text', 'Media URL', '', false)}
+            </Grid>
+            <div className="buttons">
+              <Button variant="contained" type="submit" color="primary" disabled={submitting}>
+                Submit
+              </Button>
+            </div>
+            <pre>{JSON.stringify(values, 0, 2)}</pre>
+            <pre>{JSON.stringify(dirtyFields, 0, 2)}</pre>
+          </form>
+        )}
+      />
+    );
+  }
+
+  render() {
+    const { currentPost } = this.props;
     return (
       <StyledDiv>
         <FormContainer>
-          <h1>Create Post</h1>
-          <Form
-            onSubmit={this.onSubmit}
-            render={({ handleSubmit, reset, submitting, pristine, values }) => (
-              <form onSubmit={handleSubmit} autoComplete='off'>
-                <Grid
-                  container
-                  spacing={16}
-                  direction='column'>
-                  {this.generateFields('title', required, 'text', 'title', 'cool descriptive title', false)}
-                  {this.generateFields('textContent', required, 'text', 'textContent', 'your life story', true)}
-                  {this.generateFields('mediaUrl', '', 'text', 'Media URL', 'www.reddit.com/post/1', false)}
-                </Grid>
-                <div className="buttons">
-                  <Button variant="contained" type="submit" color="primary" disabled={submitting}>
-                    Submit
-                </Button>
-                </div>
-                <pre>{JSON.stringify(values, 0, 2)}</pre>
-              </form>
-            )}
-          />
+          <h1>{this.props.formType + ' Post'}</h1>
+          {this.props.formType.toLowerCase() !== 'edit' ? this.renderCreate() : this.renderEdit(currentPost)}
         </FormContainer>
       </StyledDiv>
     );
@@ -94,4 +141,4 @@ const mapStateToProps = state => ({
   post: state.post,
 })
 
-export default connect(mapStateToProps, { createPost })(PostForm);
+export default connect(mapStateToProps, { createPost, updatePost })(PostForm);

@@ -20,6 +20,16 @@ const LabelContainer = styled.label`
   justify-content: space-between;
 `;
 
+const StyledDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+const FormContainer = styled.div`
+  margin: auto;
+  width: 50%;
+`
+
 class AuthForm extends Component {
   onSubmit = async (values) => {
     if (values.password === values.passwordConfirmation) {
@@ -49,33 +59,35 @@ class AuthForm extends Component {
     const { errors } = this.props;
 
     return (
-      <div>
-        <h1>Signup</h1>
-        <Form
-          onSubmit={this.onSubmit}
-          render={({ handleSubmit, reset, submitting, pristine, values }) => (
-            <form onSubmit={handleSubmit} autoComplete='off'>
-              <Grid container spacing={16}>
-                {this.generateFields('email', composeValidators(required, validEmail), 'text', 'Email', 'email@example.com')}
-                {this.generateFields('username', required, 'text', 'Username', 'user1234')}
-                {this.generateFields('firstName', composeValidators(required), 'text', 'First Name', 'John')}
-                {this.generateFields('lastName', composeValidators(required), 'text', 'Last Name', 'Doe')}
-                {this.generateFields('birthday', composeValidators(required, validDate), 'date', 'Birthday', '')}
-              </Grid>
-              <Grid container spacing={16}>
-                {this.generateFields('password', composeValidators(required, minSix), 'password', 'Password', '')}
-                {this.generateFields('passwordConfirmation', composeValidators(required, minSix), 'password', 'Confirm Password', '')}
-              </Grid>
-              <div className="buttons">
-                <Button variant="contained" type="submit" color="primary" disabled={submitting}>
-                  Submit
+      <StyledDiv>
+        <FormContainer>
+          <h1>Signup</h1>
+          <Form
+            onSubmit={this.onSubmit}
+            render={({ handleSubmit, reset, submitting, pristine, values }) => (
+              <form onSubmit={handleSubmit} autoComplete='off'>
+                <Grid container spacing={16}>
+                  {this.generateFields('email', composeValidators(required, validEmail), 'text', 'Email', 'email@example.com')}
+                  {this.generateFields('username', required, 'text', 'Username', 'user1234')}
+                  {this.generateFields('firstName', composeValidators(required), 'text', 'First Name', 'John')}
+                  {this.generateFields('lastName', composeValidators(required), 'text', 'Last Name', 'Doe')}
+                  {this.generateFields('birthday', composeValidators(required, validDate), 'date', 'Birthday', '')}
+                </Grid>
+                <Grid container spacing={16}>
+                  {this.generateFields('password', composeValidators(required, minSix), 'password', 'Password', '')}
+                  {this.generateFields('passwordConfirmation', composeValidators(required, minSix), 'password', 'Confirm Password', '')}
+                </Grid>
+                <div className="buttons">
+                  <Button variant="contained" type="submit" color="primary" disabled={submitting}>
+                    Submit
                 </Button>
-              </div>
-              <pre>{JSON.stringify(values, 0, 2)}</pre>
-            </form>
-          )}
-        />
-      </div>
+                </div>
+                <pre>{JSON.stringify(values, 0, 2)}</pre>
+              </form>
+            )}
+          />
+        </FormContainer>
+      </StyledDiv>
     );
 
   }

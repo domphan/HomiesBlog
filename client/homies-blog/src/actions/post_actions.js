@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LOAD_USER_POSTS, GET_ERRORS, CREATE_POST } from '.';
+import { LOAD_USER_POSTS, GET_ERRORS, CREATE_POST, CLOSE_MODAL } from '.';
 
 const URL = 'http://localhost:3001';
 
@@ -34,5 +34,33 @@ export const createPost = (content, history) => async dispatch => {
       payload: response.data
     })
     history.push('/feed');
+  }
+}
+
+export const deletePost = (postID) => async dispatch => {
+  let response = await axios.delete(`${URL}/api/posts/${postID}`)
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data.error
+      })
+    })
+  if (response) {
+    dispatch(loadUserPosts());
+  }
+}
+
+//TODO: will format after
+export const updatePost = (post, id) => async dispatch => {
+  let response = await axios.patch(`${URL}/api/posts/${id}`, post)
+    .catch(err => {
+      dispatch({
+        type: GET_ERRORS,
+        payload: err.response.data.error
+      })
+    })
+  if (response) {
+    dispatch({ type: CLOSE_MODAL })
+    dispatch(loadUserPosts());
   }
 }

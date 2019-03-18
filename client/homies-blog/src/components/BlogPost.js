@@ -1,11 +1,16 @@
 import React from 'react';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Typography from '@material-ui/core/Typography';
+import {
+  Grid,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Typography,
+} from '@material-ui/core'
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { PostMenu } from '.';
 
 const StyledMedia = styled(CardMedia)`
   height: 240px;
@@ -20,11 +25,27 @@ const StyledCard = styled(Card)`
 `;
 
 export const BlogPost = (props) => {
+  const postObject = {
+    id: props.postID,
+    title: props.title,
+    textContent: props.textContent,
+    mediaUrl: props.mediaUrl
+  }
   return (
     <StyledCard>
-      <Typography component="p">
-        <a href="">Domphan</a>
-      </Typography>
+      <Grid container
+        spacing={8}
+        justify='space-between'
+      >
+        <Grid item>
+          <Typography component="p">
+            <Link to="">Domphan</Link>
+          </Typography>
+        </Grid>
+        <Grid item>
+          <PostMenu currentPost={postObject} />
+        </Grid>
+      </Grid>
       <CardActionArea>
         <StyledMedia
           component="img"

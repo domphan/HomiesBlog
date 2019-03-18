@@ -1,4 +1,4 @@
-import { LOAD_USER_POSTS, CREATE_POST } from '../actions'
+import { LOAD_USER_POSTS, CREATE_POST, CLOSE_MODAL } from '../actions'
 
 const initialState = {
   userPosts: {},
@@ -17,6 +17,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         userPosts: [...Array.from(state.userPosts), action.payload]
+      }
+    case CLOSE_MODAL:
+      return {
+        ...state,
+        closeModal: true
       }
     default:
       return state;

@@ -24,6 +24,8 @@ class BlogFeed extends Component {
             title={post.title}
             textContent={post.textContent}
             mediaUrl={post.mediaUrl}
+            postID={post.id}
+            userID={post.user.id}
           />
         </Grid>
       );

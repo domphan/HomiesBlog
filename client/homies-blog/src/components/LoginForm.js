@@ -19,6 +19,16 @@ const LabelContainer = styled.label`
   justify-content: space-between;
 `;
 
+const StyledDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+const FormContainer = styled.div`
+  margin: auto;
+  width: 25%;
+`
+
 class LoginForm extends Component {
 
   onSubmit = async (values) => {
@@ -27,7 +37,7 @@ class LoginForm extends Component {
 
   generateFields(name, validation, type, label, placeholder) {
     return (
-      <Grid item xs={3}>
+      <Grid item lg>
         <Field name={name} validate={validation}>
           {({ input, meta }) => (
             <div>
@@ -50,26 +60,30 @@ class LoginForm extends Component {
     }
     return (
       <Grid padding={20}>
-        <h1>Login</h1>
-        <Form
-          onSubmit={this.onSubmit}
-          render={({ handleSubmit, reset, submitting, pristine, values }) => (
-            <form onSubmit={handleSubmit} autoComplete='off'>
-              <Grid container spacing={16}>
-                {this.generateFields('email', composeValidators(required, validEmail), 'text', 'Email', 'email@example.com')}
-              </Grid>
-              <Grid container spacing={16}>
-                {this.generateFields('password', composeValidators(required, minSix), 'password', 'Password', '')}
-              </Grid>
-              <div className="buttons">
-                <Button variant="contained" type="submit" color="primary" disabled={submitting}>
-                  Submit
+        <StyledDiv>
+          <FormContainer>
+            <h1>Login</h1>
+            <Form
+              onSubmit={this.onSubmit}
+              render={({ handleSubmit, reset, submitting, pristine, values }) => (
+                <form onSubmit={handleSubmit} autoComplete='off'>
+                  <Grid container spacing={16}>
+                    {this.generateFields('email', composeValidators(required, validEmail), 'text', 'Email', 'email@example.com')}
+                  </Grid>
+                  <Grid container spacing={16}>
+                    {this.generateFields('password', composeValidators(required, minSix), 'password', 'Password', '')}
+                  </Grid>
+                  <div className="buttons">
+                    <Button variant="contained" type="submit" color="primary" disabled={submitting}>
+                      Submit
                 </Button>
-              </div>
-              <pre>{JSON.stringify(values, 0, 2)}</pre>
-            </form>
-          )}
-        />
+                  </div>
+                  <pre>{JSON.stringify(values, 0, 2)}</pre>
+                </form>
+              )}
+            />
+          </FormContainer>
+        </StyledDiv>
       </Grid>
     );
   }

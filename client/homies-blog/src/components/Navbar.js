@@ -48,7 +48,7 @@ const BrandTypography = styled(Typography)`
   color: white;
 `
 const GridContainer = styled(Grid)`
-    ${
+  ${
   breakpoint('tablet')`
         flex-direction: row;
         align-items: center;
@@ -99,13 +99,13 @@ class Navbar extends Component {
         <Tabs
           value={this.state.index}   // first item is being underlined (selected) at value 0
           indicatorColor='secondary'
-
+          centered
         >
           <Link to='/' onClick={() => this.handleClick(0)}>
             <StyledTab label='Profile' />
           </Link>
-          <Link to='/post' onClick={() => this.handleClick(1)}>
-            <StyledTab label='Create' />
+          <Link to='/test' onClick={() => this.handleClick(1)}>
+            <StyledTab label='Test' />
           </Link>
           <Link to='/feed' onClick={() => this.handleClick(2)}>
             <StyledTab label='Feed' />
@@ -123,9 +123,9 @@ class Navbar extends Component {
           <Toolbar variant='title' color='inherit'>
             <GridContainer
               container
-              direction='column'
+              direction='row'
               alignItems='center'
-              justify='space-between'
+              justify='center'
               lg={12}
             >
 
@@ -137,22 +137,18 @@ class Navbar extends Component {
                 </BrandTypography>
               </Grid>
               {this.props.user.authenticated ? this.renderNavItems() : ''}
-
               <Grid item lg>
                 <Grid
                   container
                   justify='flex-end'
                 >
-                  {this.props.user.authenticated
-                    ?
-
+                  {this.props.user.authenticated ?
                     <StyledButton
                       variant='contained'
                       onClick={this.buttonOnClick}
                     >
                       Logout
                     </StyledButton>
-
                     :
                     <Fragment>
                       <Link to='/login'>
@@ -166,7 +162,6 @@ class Navbar extends Component {
                   }
                 </Grid>
               </Grid>
-
             </GridContainer>
           </Toolbar>
         </AppBar>

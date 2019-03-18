@@ -12,3 +12,5 @@ export { default as Weather } from './Weather'
 export { default as Mood } from './Mood'
 export { default as Footer } from './Footer'
 export { default as PopperContainer } from './PopperContainer';
+export { default as PostMenu } from './PostMenu';
+export { default as EditModal } from './EditModal';
