@@ -4,16 +4,15 @@ import { Modal, Typography } from '@material-ui/core';
 import styled from 'styled-components';
 
 
-const StyledDiv = styled.div`
-  background-color: white;
-  background: white;
-`;
-
 const ModalContainer = styled.div`
-  position: absolute;
-  background-color: white;
-  box-shadow: none;
+  padding: 10px;
+  top: 50%;
+  left: 50%;
 `
+
+const StyledModal = styled(Modal)`
+  margin-top: 5%;
+`;
 
 class EditModal extends Component {
   state = {
@@ -30,17 +29,16 @@ class EditModal extends Component {
   render() {
     return (
       <ModalContainer>
-        <Modal
+        <StyledModal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
           open={this.state.open}
           onClose={this.handleClose}
           hideBackdrop='true'
+          disableAutoFocus='true'
         >
-          <StyledDiv>
-            <PostForm formType='edit' onSubmit={this.props.onSubmit} currentPost={this.props.currentPost} />
-          </StyledDiv>
-        </Modal>
+          <PostForm formType='edit' onSubmit={this.props.onSubmit} currentPost={this.props.currentPost} />
+        </StyledModal>
       </ModalContainer>
     );
   }

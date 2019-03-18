@@ -18,11 +18,6 @@ export default (state = initialState, action) => {
         ...state,
         userPosts: [...Array.from(state.userPosts), action.payload]
       }
-    case CLOSE_MODAL:
-      return {
-        ...state,
-        closeModal: true
-      }
     default:
       return state;
   }

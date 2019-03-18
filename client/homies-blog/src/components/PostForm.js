@@ -3,13 +3,10 @@ import { connect } from 'react-redux';
 import styled from 'styled-components'
 import { required } from '../common/validation';
 import {
-  Paper,
   Grid,
   Button,
-  Typography,
 } from '@material-ui/core'
 import { Form, Field } from 'react-final-form';
-import { TextField } from 'final-form-material-ui';
 import { createPost, updatePost } from '../actions/post_actions';
 const LabelError = styled.span`
   color: red;
@@ -29,7 +26,17 @@ const StyledDiv = styled.div`
 
 const FormContainer = styled.div`
   margin: auto;
+  background-color: #f2f2f2;
+  padding: 2.5%;
+  box-shadow: 0 0 3pt 2pt lightblue;
+  max-width: 25%;
 `
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
 
 class PostForm extends Component {
   generateFields(name, validation, type, label, placeholder, textarea) {
@@ -108,13 +115,15 @@ class PostForm extends Component {
               {this.generateFields('textContent', required, 'text', 'textContent', '', true)}
               {this.generateFields('mediaUrl', '', 'text', 'Media URL', '', false)}
             </Grid>
-            <div className="buttons">
+            <ButtonContainer>
               <Button variant="contained" type="submit" color="primary" disabled={submitting}>
                 Submit
               </Button>
-            </div>
+              <Button variant="contained" color="secondary" onClick={() => this.props.onSubmit()}>
+                Cancel
+              </Button>
+            </ButtonContainer>
             <pre>{JSON.stringify(values, 0, 2)}</pre>
-            <pre>{JSON.stringify(dirtyFields, 0, 2)}</pre>
           </form>
         )}
       />

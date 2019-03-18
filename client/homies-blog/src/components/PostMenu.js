@@ -21,7 +21,6 @@ class PostMenu extends Component {
     super();
     this.state = {
       anchorEl: null,
-      selectedOption: null,
       mountModal: false
     };
     this.closeAfterEdit = this.closeAfterEdit.bind(this);

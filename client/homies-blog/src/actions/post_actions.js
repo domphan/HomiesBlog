@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LOAD_USER_POSTS, GET_ERRORS, CREATE_POST, CLOSE_MODAL } from '.';
+import { LOAD_USER_POSTS, GET_ERRORS, CREATE_POST } from '.';
 
 const URL = 'http://localhost:3001';
 
@@ -45,12 +45,11 @@ export const deletePost = (postID) => async dispatch => {
         payload: err.response.data.error
       })
     })
-  if (response) {
+  if (response.status >= 200 && response.status < 400) {
     dispatch(loadUserPosts());
   }
 }
 
-//TODO: will format after
 export const updatePost = (post, id) => async dispatch => {
   let response = await axios.patch(`${URL}/api/posts/${id}`, post)
     .catch(err => {
@@ -59,8 +58,7 @@ export const updatePost = (post, id) => async dispatch => {
         payload: err.response.data.error
       })
     })
-  if (response) {
-    dispatch({ type: CLOSE_MODAL })
+  if (response.status >= 200 && response.status < 400) {
     dispatch(loadUserPosts());
   }
 }

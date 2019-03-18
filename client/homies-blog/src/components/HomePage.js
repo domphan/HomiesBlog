@@ -32,7 +32,7 @@ class HomePage extends Component {
           {user.userinfo ? `Hello ${user.userinfo.firstName}` : 'make an account dude'}
         </StyledTypography>
 
-        <PostForm formType='Create' />
+        <PostForm formType='Create' history={this.props.history} />
         <Grid
           container
           lg={12}
