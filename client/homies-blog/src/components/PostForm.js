@@ -46,6 +46,12 @@ const IconContainer = styled.div`
   justify-content: flex-end;
   margin: 1% 0;
 `
+const MediaContainer = styled(Grid)`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 10%;
+`;
 
 class PostForm extends Component {
   state = {
@@ -103,29 +109,44 @@ class PostForm extends Component {
               direction='column'>
               {this.generateFields('title', required, 'text', 'title', 'cool descriptive title', false)}
               {this.generateFields('textContent', required, 'text', 'textContent', 'your life story', true)}
-              {this.generateFields('mediaUrl', '', 'text', 'Media URL', 'www.reddit.com/post/1', false)}
-            </Grid>
-            <Field name="drop-zone">
-              {({ input, meta }) => (
-                <Dropzone
-                  accept="image/*"
-                  maxSize="15000000"
-                  onDrop={acceptedFiles => this.setState({ fileUpload: acceptedFiles })}>
-                  {({ getRootProps, getInputProps }) => (
-                    <section>
-                      <div {...getRootProps()}>
-                        <input {...getInputProps()} />
-                        <IconContainer>
-                          <IconButton color="primary" aria-label="upload-image">
-                            <PhotoCamera />
-                          </IconButton>
-                        </IconContainer>
-                      </div>
-                    </section>
+              <MediaContainer item lg={12}>
+                <Field name='mediaUrl'>
+                  {({ input, meta }) => (
+                    <div>
+                      <LabelContainer>
+                        <label>MediaUrl or Upload</label> {meta.error && meta.touched && <LabelError>{meta.error}</LabelError>}
+                      </LabelContainer>
+                      <input {...input}
+                        type='text'
+                        placeholder={this.state.fileUpload ? 'Uploaded Image' : 'https://i.redd.it/w2nho6o2k4n21.jpg'}
+                        disabled={Boolean(this.state.fileUpload)}
+                      />
+                    </div>
                   )}
-                </Dropzone>
-              )}
-            </Field>
+                </Field>
+                <Field name="drop-zone">
+                  {({ input, meta }) => (
+                    <Dropzone
+                      accept="image/*"
+                      maxSize="15000000"
+                      onDrop={acceptedFiles => this.setState({ fileUpload: acceptedFiles })}>
+                      {({ getRootProps, getInputProps }) => (
+                        <section>
+                          <div {...getRootProps()}>
+                            <input {...getInputProps()} />
+                            <IconContainer>
+                              <IconButton color="primary" aria-label="upload-image">
+                                <PhotoCamera />
+                              </IconButton>
+                            </IconContainer>
+                          </div>
+                        </section>
+                      )}
+                    </Dropzone>
+                  )}
+                </Field>
+              </MediaContainer>
+            </Grid>
             <div className="buttons">
               <Button variant="contained" type="submit" color="primary" disabled={submitting}>
                 Submit
