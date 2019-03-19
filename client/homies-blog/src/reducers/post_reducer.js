@@ -1,4 +1,4 @@
-import { LOAD_USER_POSTS, CREATE_POST, CLOSE_MODAL } from '../actions'
+import { LOAD_USER_POSTS, CREATE_POST } from '../actions'
 
 const initialState = {
   userPosts: {},

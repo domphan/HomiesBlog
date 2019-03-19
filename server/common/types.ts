@@ -31,3 +31,7 @@ export interface PostPatchInterface {
     path: string,
     value: string
 }
+
+export interface UploadRequest extends Request {
+    file: any
+}

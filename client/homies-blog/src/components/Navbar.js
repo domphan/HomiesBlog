@@ -116,7 +116,6 @@ class Navbar extends Component {
   }
 
   render() {
-    const { classes } = this.props
     return (
       <div id='navbar-container'>
         <AppBar position='static'>

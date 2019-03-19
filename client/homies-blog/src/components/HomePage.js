@@ -1,12 +1,9 @@
-import React, { Component, Fragment } from 'react';
-import EventForm from './EventForm'
+import React, { Component } from 'react';
 import styled from 'styled-components'
 import { connect } from 'react-redux';
 import { getUserInfo } from '../actions/user_actions';
-import Weather from './Weather'
-import Mood from './Mood'
-import { SignupForm, PostForm } from '.';
-import breakpoint from 'styled-components-breakpoint'
+import { PostForm } from '.';
+
 import {
   Typography,
   Grid,
@@ -22,7 +19,6 @@ class HomePage extends Component {
     this.props.getUserInfo();
   }
   render() {
-    const { classes } = this.props
     const { user } = this.props;
     return (
       <div>

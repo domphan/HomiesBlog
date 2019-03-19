@@ -3,7 +3,6 @@ import {
   Grid,
   Card,
   CardActionArea,
-  CardActions,
   CardContent,
   CardMedia,
   Typography,
@@ -47,11 +46,11 @@ export const BlogPost = (props) => {
         </Grid>
       </Grid>
       <CardActionArea>
-        <StyledMedia
+        {props.mediaUrl && <StyledMedia
           component="img"
           image={props.mediaUrl}
           title={props.title}
-        />
+        />}
       </CardActionArea>
       <CardContent>
         <Typography gutterBottom variant="h5" component="h2">

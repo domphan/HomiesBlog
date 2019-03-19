@@ -19,6 +19,7 @@ export class Post {
     @Column('varchar', { length: 255, nullable: true })
     mediaUrl: string;
 
+
     // todo: array of users
     @Column({ type: 'simple-array', default: '' })
     likes: User[];

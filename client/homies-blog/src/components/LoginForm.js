@@ -3,10 +3,9 @@ import Button from '@material-ui/core/Button';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { login } from '../actions/user_actions';
-import PropTypes from 'prop-types';
 import { Form, Field } from 'react-final-form';
 import { required, validEmail, minSix, composeValidators } from '../common/validation';
-import { GridList, Grid } from '@material-ui/core/';
+import { Grid } from '@material-ui/core/';
 
 const LabelError = styled.span`
   color: red;
@@ -78,7 +77,6 @@ class LoginForm extends Component {
                       Submit
                 </Button>
                   </div>
-                  <pre>{JSON.stringify(values, 0, 2)}</pre>
                 </form>
               )}
             />

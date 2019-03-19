@@ -1,10 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
-import {
-  Form,
-  Field,
-} from 'react-final-form'
+
 import {
   Paper,
   Typography,
@@ -14,23 +11,19 @@ import {
   Divider,
 } from '@material-ui/core'
 
-const Alert = styled.span
-  `
-  color: red;
-  `
-const StyledPaper = styled(Paper)
-  `
+// const Alert = styled.span`
+//   color: red;
+// `
+const StyledPaper = styled(Paper)`
   padding: 20px;
   width: 325px;
-  `
-const StyledButton = styled(Button)
-  `
+`
+const StyledButton = styled(Button)`
     margin-top: 15px;
-  `
-const GridContainer = styled(Grid)
-  `
+`
+const GridContainer = styled(Grid)`
   
-  `
+`
 
 const zipcodeValid = (zipcode) => (
   zipcode.length === 5 && !isNaN(zipcode)
@@ -58,7 +51,7 @@ class Weather extends Component {
 
     zipcodeValid(zipcode)
       ? this.setState((prevState) => {
-        let weather = {}
+        // let weather = {}
 
         axios.get(openWeatherURL(zipcode))
           .then((res) => {
@@ -98,7 +91,7 @@ class Weather extends Component {
     const weatherInfo = Object.entries(weather).length === 0 && weather.constructor === Object
       ? null
       : (<Fragment>
-        <img src={weatherIcon(weather.icon)} />
+        <img src={weatherIcon(weather.icon)} alt="weather" />
         <Typography
           variant='caption'
         >

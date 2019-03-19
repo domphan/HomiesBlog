@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import Button from '@material-ui/core/Button';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { Form, Field } from 'react-final-form';
 import { required, validEmail, validDate, minSix, composeValidators } from '../common/validation';
 import Grid from '@material-ui/core/Grid';
 import { signup, setErrorMsg } from '../actions/user_actions';
-import { isEmpty } from 'lodash';
 
 const LabelError = styled.span`
   color: red;
@@ -56,8 +54,6 @@ class AuthForm extends Component {
     );
   }
   render() {
-    const { errors } = this.props;
-
     return (
       <StyledDiv>
         <FormContainer>
@@ -82,7 +78,6 @@ class AuthForm extends Component {
                     Submit
                 </Button>
                 </div>
-                <pre>{JSON.stringify(values, 0, 2)}</pre>
               </form>
             )}
           />

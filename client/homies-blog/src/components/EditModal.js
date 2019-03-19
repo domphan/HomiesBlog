@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { PostForm } from '.';
-import { Modal, Typography } from '@material-ui/core';
+import { Modal } from '@material-ui/core';
 import styled from 'styled-components';
 
 
@@ -34,7 +34,6 @@ class EditModal extends Component {
           aria-describedby="simple-modal-description"
           open={this.state.open}
           onClose={this.handleClose}
-          hideBackdrop='true'
           disableAutoFocus='true'
         >
           <PostForm formType='edit' onSubmit={this.props.onSubmit} currentPost={this.props.currentPost} />

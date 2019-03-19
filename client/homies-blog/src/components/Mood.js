@@ -5,39 +5,34 @@ import {
   TextField,
   Button,
 } from '@material-ui/core'
-import {
-  indigo
-} from '@material-ui/core/colors'
 
-const StyledPaper = styled(Paper)
-  `
+
+const StyledPaper = styled(Paper)`
   width: 400px;
   position: relative;
-  `
-const StyledTextField = styled(TextField)
-  `
+`
+const StyledTextField = styled(TextField)`
   width: 80%;
-  `
-const StyledButton = styled(Button)
-  `
+`
+const StyledButton = styled(Button)`
   width: 20%;
   bottom: 0;
   top: 0;
   position: absolute;
-  `
+`
 
 class Mood extends Component {
   state = {
     mood: "",
   }
+  //TODO: implement
+  // handleSubmit = (event) => {
+  //   const { name, value } = event.target
 
-  handleSubmit = (event) => {
-    const { name, value } = event.target
-
-    this.setState({
-      mood: "",
-    })
-  }
+  //   this.setState({
+  //     mood: "",
+  //   })
+  // }
 
   handleChange = (event) => {
     const { name, value } = event.target

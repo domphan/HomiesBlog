@@ -1,11 +1,14 @@
 import React, { Component } from 'react'
+import Dropzone from 'react-dropzone';
 import { connect } from 'react-redux';
 import styled from 'styled-components'
 import { required } from '../common/validation';
 import {
   Grid,
   Button,
+  IconButton
 } from '@material-ui/core'
+import { PhotoCamera } from '@material-ui/icons';
 import { Form, Field } from 'react-final-form';
 import { createPost, updatePost } from '../actions/post_actions';
 const LabelError = styled.span`
@@ -38,7 +41,17 @@ const ButtonContainer = styled.div`
   justify-content: space-between;
 `;
 
+const IconContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin: 1% 0;
+`
+
 class PostForm extends Component {
+  state = {
+    fileUpload: null
+  }
+
   generateFields(name, validation, type, label, placeholder, textarea) {
     return (
       <Grid item lg={12}>
@@ -57,7 +70,11 @@ class PostForm extends Component {
   }
 
   onSubmit = async (values) => {
-    await this.props.createPost(values, this.props.history);
+    const post = { ...values, upload: null };
+    if (this.state.fileUpload) {
+      post.upload = this.state.fileUpload[0];
+    }
+    await this.props.createPost(post, this.props.history);
   }
 
   submitUpdate = async (values, dirtyFields) => {
@@ -88,12 +105,32 @@ class PostForm extends Component {
               {this.generateFields('textContent', required, 'text', 'textContent', 'your life story', true)}
               {this.generateFields('mediaUrl', '', 'text', 'Media URL', 'www.reddit.com/post/1', false)}
             </Grid>
+            <Field name="drop-zone">
+              {({ input, meta }) => (
+                <Dropzone
+                  accept="image/*"
+                  maxSize="15000000"
+                  onDrop={acceptedFiles => this.setState({ fileUpload: acceptedFiles })}>
+                  {({ getRootProps, getInputProps }) => (
+                    <section>
+                      <div {...getRootProps()}>
+                        <input {...getInputProps()} />
+                        <IconContainer>
+                          <IconButton color="primary" aria-label="upload-image">
+                            <PhotoCamera />
+                          </IconButton>
+                        </IconContainer>
+                      </div>
+                    </section>
+                  )}
+                </Dropzone>
+              )}
+            </Field>
             <div className="buttons">
               <Button variant="contained" type="submit" color="primary" disabled={submitting}>
                 Submit
               </Button>
             </div>
-            <pre>{JSON.stringify(values, 0, 2)}</pre>
           </form>
         )}
       />
@@ -115,6 +152,7 @@ class PostForm extends Component {
               {this.generateFields('textContent', required, 'text', 'textContent', '', true)}
               {this.generateFields('mediaUrl', '', 'text', 'Media URL', '', false)}
             </Grid>
+
             <ButtonContainer>
               <Button variant="contained" type="submit" color="primary" disabled={submitting}>
                 Submit
@@ -123,7 +161,6 @@ class PostForm extends Component {
                 Cancel
               </Button>
             </ButtonContainer>
-            <pre>{JSON.stringify(values, 0, 2)}</pre>
           </form>
         )}
       />
@@ -135,7 +172,7 @@ class PostForm extends Component {
     return (
       <StyledDiv>
         <FormContainer>
-          <h1>{this.props.formType + ' Post'}</h1>
+          <h4>{this.props.formType + ' Post'}</h4>
           {this.props.formType.toLowerCase() !== 'edit' ? this.renderCreate() : this.renderEdit(currentPost)}
         </FormContainer>
       </StyledDiv>

@@ -1,8 +1,9 @@
 import { NextFunction, Request, Response } from 'express';
 import { BAD_REQUEST } from 'http-status-codes';
-import { PostPatchInterface } from '../common/types';
+import { PostPatchInterface, UploadRequest } from '../common/types';
 import { BaseController } from './base';
 import { pick } from 'lodash';
+import { upload } from '../services/aws_s3';
 
 export class PostController extends BaseController {
 
@@ -60,6 +61,16 @@ export class PostController extends BaseController {
                 .catch((err: any) => res.status(BAD_REQUEST).json({ error: err.message }));
         });
         res.json(await this.db.post.findOneOrFail(req.params.id));
+    }
+
+    public uploadImage = async (req: UploadRequest, res: Response, next: NextFunction) => {
+        const singleUpload = upload.single('image');
+        await singleUpload(req, res, (err) => {
+            if (err) {
+                return res.status(BAD_REQUEST).json({ error: err.message });
+            }
+            return res.json({ mediaUrl: req.file.location });
+        });
     }
 
     private _patch = async (op: string, path: string, value: string, id: string) => {

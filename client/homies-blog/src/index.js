@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { HomePage, BlogFeed, Navbar, PostForm, Events, SignupForm, LoginForm, Footer, PopperContainer, EditModal } from './components';
+import { HomePage, BlogFeed, Navbar, SignupForm, LoginForm, PopperContainer } from './components';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
@@ -13,7 +13,6 @@ import { create } from "jss";
 import { createGenerateClassName, jssPreset } from "@material-ui/core/styles";
 import { logoutUser, setAuthToken, setCurrentUser } from './actions/user_actions';
 import jwt_decode from 'jwt-decode';
-import styled from 'styled-components';
 
 const generateClassName = createGenerateClassName();
 const jss = create({
