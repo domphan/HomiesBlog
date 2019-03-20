@@ -23,7 +23,7 @@ class HomePage extends Component {
     return (
       <div>
         <StyledTypography
-          variant='h1'
+          variant='h3'
         >
           {user.userinfo ? `Hello ${user.userinfo.firstName}` : 'make an account dude'}
         </StyledTypography>

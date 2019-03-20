@@ -1,11 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
 import { BAD_REQUEST } from 'http-status-codes';
-import { PostPatchInterface, UploadRequest } from '../common/types';
-import { BaseController } from './base';
 import { pick } from 'lodash';
-import { upload } from '../services/aws_s3';
+import * as Url from 'url-parse';
+import { s3, upload } from '../services/aws_s3';
+import { BaseController } from './base';
+import { PostPatchInterface, UploadRequest } from '../common/types';
+
 
 export class PostController extends BaseController {
+    public CDN_URL = 'https://d34odhoqqlkyny.cloudfront.net';
 
     public createPost = async (req: Request, res: Response, next: NextFunction) => {
         const user = await this.db.user.findOneOrFail(req.user[0].id)
@@ -41,10 +44,20 @@ export class PostController extends BaseController {
     }
 
     public deletePost = async (req: Request, res: Response, next: NextFunction) => {
+        let s3DeleteFlag = false;
         const post = await this.db.post.findOneOrFail(req.params.id)
             .catch((err: any) => res.status(BAD_REQUEST).json({ error: 'post doesn\'t exist' }));
-        this.db.post.delete(post.id)
+        if (post.mediaUrl.includes(this.CDN_URL)) {
+            s3DeleteFlag = true;
+        }
+        await this.db.post.delete(post.id)
             .catch((err: any) => res.status(BAD_REQUEST).json({ error: 'unable to delete' }));
+        if (s3DeleteFlag) {
+            await this._deleteS3(post.mediaUrl)
+                .catch((err: any) => {
+                    console.error('unable to delete link from s3');
+                });
+        }
         return res.status(204).json({});
     }
 
@@ -69,7 +82,21 @@ export class PostController extends BaseController {
             if (err) {
                 return res.status(BAD_REQUEST).json({ error: err.message });
             }
-            return res.json({ mediaUrl: req.file.location });
+            const s3Url: Url = new Url(req.file.location);
+            return res.json({ mediaUrl: `https://${this.CDN_URL}${s3Url.pathname}` });
+        });
+    }
+
+    private _deleteS3 = async (cdnLink: string) => {
+        const link: Url = new Url(cdnLink);
+        const params = {
+            Bucket: 'homiesblogbucket',
+            Key: link.pathname.replace('/', '')
+        };
+        s3.deleteObject(params, (err, data) => {
+            if (err) {
+                throw new Error(err.stack);
+            }
         });
     }
 
