@@ -6,7 +6,8 @@ import { required } from '../common/validation';
 import {
   Grid,
   Button,
-  IconButton
+  IconButton,
+  LinearProgress,
 } from '@material-ui/core'
 import { PhotoCamera } from '@material-ui/icons';
 import { Form, Field } from 'react-final-form';
@@ -148,9 +149,9 @@ class PostForm extends Component {
               </MediaContainer>
             </Grid>
             <div className="buttons">
-              <Button variant="contained" type="submit" color="primary" disabled={submitting}>
+              {this.props.post.isUploading ? <LinearProgress /> : <Button variant="contained" type="submit" color="primary" disabled={submitting}>
                 Submit
-              </Button>
+              </Button>}
             </div>
           </form>
         )}

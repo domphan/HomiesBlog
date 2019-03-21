@@ -83,7 +83,7 @@ export class PostController extends BaseController {
                 return res.status(BAD_REQUEST).json({ error: err.message });
             }
             const s3Url: Url = new Url(req.file.location);
-            return res.json({ mediaUrl: `https://${this.CDN_URL}${s3Url.pathname}` });
+            return res.json({ mediaUrl: `${this.CDN_URL}${s3Url.pathname}` });
         });
     }
 

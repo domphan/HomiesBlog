@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LOAD_USER_POSTS, GET_ERRORS, CREATE_POST } from '.';
+import { LOAD_USER_POSTS, GET_ERRORS, CREATE_POST, UPLOAD_IMAGE } from '.';
 
 const URL = 'http://localhost:3001';
 
@@ -21,6 +21,7 @@ export const loadUserPosts = () => async dispatch => {
 }
 
 export const createPost = (content, history) => async dispatch => {
+  dispatch({ type: UPLOAD_IMAGE });
   if (content.upload) {
     let data = new FormData();
     data.append('image', content.upload);
