@@ -1,0 +1,28 @@
+version: '3.2'
+services:
+  postgres:
+    image: postgres:latest
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    container_name: "typeorm-postgres"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "DominicPhan"
+      POSTGRES_PASSWORD: "poopoo"
+      POSTGRES_DB: "homies_blog"
+  
+  backend:
+    container_name: hblog_backend
+    build:
+      context: .
+      dockerfile: ./server/dockerfile
+    ports:
+      - '3001:3001'
+    volumes:
+      - './server:/usr/src/app'
+      - './usr/src/app/node_modules'
+    depends_on:
+      - postgres
+    links:
+      - postgres

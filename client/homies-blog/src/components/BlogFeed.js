@@ -2,32 +2,51 @@ import React, { Component } from 'react';
 import { BlogPost } from './';
 import Grid from '@material-ui/core/Grid';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import { loadUserPosts } from '../actions/post_actions';
+import { isEmpty } from 'lodash';
 
 const StyledGrid = styled(Grid)`
   display: flex;
-  align-content: center;
-`
-
-const StyledDiv = styled.div`
-  flex-grow: 1;
+  justify-content: center;
+  flex-direction: column;
 `
 
 class BlogFeed extends Component {
+  componentWillMount() {
+    this.props.loadUserPosts();
+  }
+  renderPosts() {
+    return Array.from(this.props.post.userPosts).map((post) => {
+      return (
+        <Grid item lg='auto' xs={3}>
+          <BlogPost
+            title={post.title}
+            textContent={post.textContent}
+            mediaUrl={post.mediaUrl}
+            postID={post.id}
+            userID={post.user.id}
+          />
+        </Grid>
+      );
+    })
+  }
   render() {
     return (
-      <StyledDiv>
-        <StyledGrid container spacing={24}>
-          <Grid item xs={12}>
-            <BlogPost />
-            <BlogPost />
-            <BlogPost />
-            <BlogPost />
-            <BlogPost />
-          </Grid>
-        </StyledGrid>
-      </StyledDiv>
+      <StyledGrid
+        container
+        direction='column'
+        justify='center'
+        spacing={16}
+      >
+        {!isEmpty(this.props.post) ? this.renderPosts() : ''}
+      </StyledGrid>
     );
   }
 }
 
-export default BlogFeed;
+const mapStateToProps = state => ({
+  errors: state.error,
+  post: state.post,
+})
+export default connect(mapStateToProps, { loadUserPosts })(BlogFeed);

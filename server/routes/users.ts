@@ -44,12 +44,13 @@ router.post('/signup', [
 
 // Login
 router.post('/login', [
-    check('username')
+    check('email')
         .isString()
         .not().isEmpty(),
     check('password')
         .isLength({ min: 6 })
 ], (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.body.username, req.body.password);
     const errors: any = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });

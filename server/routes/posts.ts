@@ -3,6 +3,7 @@ import { check, validationResult } from 'express-validator/check';
 import { sanitizeBody } from 'express-validator/filter';
 import * as passport from 'passport'
 import { PostController } from '../controllers/PostController';
+import { UploadRequest } from '../common/types';
 
 
 const router = Router();
@@ -18,6 +19,7 @@ router.post('/', [
     check('textContent')
         .isString(),
     check('mediaUrl')
+        .optional()
         .isURL()
 ], (req: Request, res: Response, next: NextFunction) => {
     const errors: any = validationResult(req);
@@ -37,6 +39,12 @@ router.get('/:id', passport.authenticate('jwt', { session: false }),
     (req: Request, res: Response, next: NextFunction) => {
         post.getPost(req, res, next);
     });
+
+router.post('/img', passport.authenticate('jwt', { session: false }),
+    (req: UploadRequest, res: Response, next: NextFunction) => {
+        post.uploadImage(req, res, next);
+    }
+)
 
 router.delete('/:id', passport.authenticate('jwt', { session: false }),
     (req: Request, res: Response, next: NextFunction) => {

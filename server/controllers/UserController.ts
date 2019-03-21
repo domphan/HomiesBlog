@@ -4,7 +4,8 @@ import { Response, Request, NextFunction } from 'express';
 import { BAD_REQUEST, UNAUTHORIZED, ACCEPTED } from 'http-status-codes';
 import { BaseController } from './base';
 import { UserRequestInterface } from '../common/types';
-import { runInNewContext } from 'vm';
+
+const ONE_DAY = 84600;
 
 //todo: fix try catches, remove more stuff from payload
 export class UserController extends BaseController {
@@ -31,7 +32,7 @@ export class UserController extends BaseController {
         // Check if email exists already
         const emailLookup = await this.db.user.findOne({ email: user.email })
         if (emailLookup) {
-            return res.status(400).json({ msg: "user already exists" })
+            return res.status(400).json({ error: 'user already exists' })
         }
         // hash password then store new user
         user.password = await this._hashPassword(user.password);
@@ -44,25 +45,23 @@ export class UserController extends BaseController {
     Logs the user in by returning a JWT to be used with future requests
     */
     public login = async (req: Request, res: Response, next: NextFunction) => {
-        const { username, password } = req.body;
-        const user = await this.db.user.findOneOrFail({ username })
-            .catch((err: any) => {
-                res.status(404).json({ error: 'user not found' })
-                next(err);
-            });
+        const { email, password } = req.body;
+        const user = await this.db.user.findOne({ email })
+        if (!user) {
+            res.status(404).json({ error: 'user not found' })
+        }
         const matching = await bcrypt.compare(password, user.password)
             .catch((err: any) => {
-                res.status(BAD_REQUEST).json({ error: 'passwords do not match' });
                 next(err);
             });
         if (!matching) {
-            return res.status(BAD_REQUEST).json({ error: 'passwords do not match' });
+            return res.status(BAD_REQUEST).json({ error: 'password invalid' });
         }
         const payload: object = {
             id: user.id
         };
         const token: string = await jwt.sign(payload, 'secretsecret', {
-            expiresIn: 3600
+            expiresIn: ONE_DAY
         });
         res.json({
             success: true,
