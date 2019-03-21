@@ -8,6 +8,7 @@ import {
   Button,
   IconButton,
   LinearProgress,
+  CircularProgress,
 } from '@material-ui/core'
 import { PhotoCamera } from '@material-ui/icons';
 import { Form, Field } from 'react-final-form';
@@ -99,6 +100,8 @@ class PostForm extends Component {
   }
 
   renderCreate() {
+    const { post } = this.props;
+    const { fileUpload } = this.state;
     return (
       <Form
         onSubmit={this.onSubmit}
@@ -119,8 +122,8 @@ class PostForm extends Component {
                       </LabelContainer>
                       <input {...input}
                         type='text'
-                        placeholder={this.state.fileUpload ? 'Uploaded Image' : 'https://i.redd.it/w2nho6o2k4n21.jpg'}
-                        disabled={Boolean(this.state.fileUpload)}
+                        placeholder={fileUpload ? 'Uploaded Image' : 'https://i.redd.it/w2nho6o2k4n21.jpg'}
+                        disabled={Boolean(fileUpload)}
                       />
                     </div>
                   )}
@@ -137,7 +140,7 @@ class PostForm extends Component {
                             <input {...getInputProps()} />
                             <IconContainer>
                               <IconButton color="primary" aria-label="upload-image">
-                                <PhotoCamera />
+                                {post.isUploading ? <CircularProgress /> : <PhotoCamera />}
                               </IconButton>
                             </IconContainer>
                           </div>
@@ -149,7 +152,7 @@ class PostForm extends Component {
               </MediaContainer>
             </Grid>
             <div className="buttons">
-              {this.props.post.isUploading ? <LinearProgress /> : <Button variant="contained" type="submit" color="primary" disabled={submitting}>
+              {post.isUploading ? <LinearProgress /> : <Button variant="contained" type="submit" color="primary" disabled={submitting}>
                 Submit
               </Button>}
             </div>

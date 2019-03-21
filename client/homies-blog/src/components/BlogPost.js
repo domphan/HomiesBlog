@@ -38,7 +38,7 @@ export const BlogPost = (props) => {
       >
         <Grid item>
           <Typography component="p">
-            <Link to="">Domphan</Link>
+            <h6><Link to="">DomPhan</Link></h6>
           </Typography>
         </Grid>
         <Grid item>

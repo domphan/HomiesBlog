@@ -1,43 +1,43 @@
 import { BaseEntity, Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Comment, Post } from '.';
+import { Timestamp } from './AbstractTimestamp';
+import { Comment, Post } from './';
 
 @Entity()
-export class User {
+export class User extends Timestamp {
 
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    public id: string;
 
     @Column('varchar', { length: 255 })
-    firstName: string;
+    public firstName: string;
 
     @Column('varchar', { length: 255 })
-    lastName: string;
+    public lastName: string;
 
     @Column('date')
-    birthday: Date;
+    public birthday: Date;
 
     @Column('varchar', { length: 255 })
-    username: string;
+    public username: string;
 
     @Column('varchar', { length: 255 })
-    email: string;
+    public email: string;
 
     @Column('text', { nullable: true })
-    password: string;
+    public password: string;
 
     @OneToMany(type => Post, post => post.user, {
         cascade: true
     })
     @JoinColumn()
-    posts: Post[];
+    public posts: Post[];
 
     @OneToMany(type => Comment, comment => comment.user, {
         cascade: true
     })
+    @JoinColumn()
+    public comments: Comment[];
 
     @JoinColumn()
-    comments: Comment[];
-
-    @JoinColumn()
-    friends: User[]
+    public friends: User[]
 }

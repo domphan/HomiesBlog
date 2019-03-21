@@ -1,31 +1,33 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Timestamp } from './AbstractTimestamp';
 import { Comment, User } from './';
 
+
 @Entity()
-export class Post {
+export class Post extends Timestamp {
     @PrimaryGeneratedColumn('uuid')
-    id: string;
+    public id: string;
 
     @ManyToOne(type => User, user => user.posts)
     @JoinColumn({ name: 'userId' })
-    user: User;
+    public user: User;
 
     @Column('varchar', { length: 255 })
-    title: string;
+    public title: string;
 
     @Column('text')
-    textContent: string;
+    public textContent: string;
 
     @Column('varchar', { length: 255, nullable: true })
-    mediaUrl: string;
+    public mediaUrl: string;
 
 
     // todo: array of users
     @Column({ type: 'simple-array', default: '' })
-    likes: User[];
+    public likes: User[];
 
     @OneToMany(type => Comment, comment => comment.post, {
         cascade: true
     })
-    comments: Comment[];
+    public comments: Comment[];
 }

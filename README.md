@@ -9,7 +9,8 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 ```
-The only thing you need installed is Docker
+Docker must be installed
+You must have your own S3 and Cloudfront credentials in a keys.json file
 ```
 
 ### Installing
@@ -34,4 +35,4 @@ Visit the webapp on localhost:3000, use the API on localhost:3001
 
 ## Authors
 
-* **Dominic Phan** - *Frontend, Backend* - [Domphan](https://github.com/Domphan)
+* **Dominic Phan** - *Fullstack* - [Domphan](https://github.com/Domphan)

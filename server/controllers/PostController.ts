@@ -26,12 +26,13 @@ export class PostController extends BaseController {
     public getAllPostsFromUser = async (req: Request, res: Response, next: NextFunction) => {
         const userId = req.user[0].id;
         const posts = await this.db.post.createQueryBuilder('post')
+            .orderBy('post.createdAt', 'DESC')
             .leftJoinAndSelect('post.user', 'user')
             .where('user.id = :id', { id: userId })
             .getMany()
             .catch((err: any) => next(err));
         res.json(posts.map((post) => {
-            return pick(post, ['id', 'title', 'textContent', 'mediaUrl', 'likes', 'user.id']);
+            return pick(post, ['id', 'title', 'textContent', 'mediaUrl', 'likes', 'user.id', 'createdAt']);
         }));
     }
 

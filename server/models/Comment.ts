@@ -1,19 +1,22 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinColumn, OneToMany } from 'typeorm';
-import { Post, User } from './'
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Timestamp } from './AbstractTimestamp';
+import { Post, User } from './';
+
+
 
 @Entity()
-export class Comment {
+export class Comment extends Timestamp {
 
     @PrimaryGeneratedColumn('uuid')
-    id: string
+    public id: string
 
     @Column('text')
-    textContent: string
+    public textContent: string
 
     @ManyToOne(type => User, user => user.comments)
-    user: User
+    public user: User
 
     @ManyToOne(type => Post, post => post.comments)
-    post: Post
+    public post: Post
 
 }
