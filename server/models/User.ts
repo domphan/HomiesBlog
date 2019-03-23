@@ -26,6 +26,12 @@ export class User extends Timestamp {
     @Column('text', { nullable: true })
     public password: string;
 
+    @Column('varchar', { length: 255, nullable: true })
+    public aboutMe: string;
+
+    @Column('varchar', { length: 255, nullable: true })
+    public profilePic: string;
+
     @OneToMany(type => Post, post => post.user, {
         cascade: true
     })
