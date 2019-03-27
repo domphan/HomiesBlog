@@ -68,7 +68,13 @@ class Navbar extends Component {
   componentDidUpdate() {
     const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
     if (!isEmpty(this.props.errors)) {
-      sleep(2500).then(() => this.props.clearErrors())
+      if (this.props.errors.message === 'Unauthorized') {
+        this.props.logoutUser(this.props.history);
+        this.props.clearErrors();
+      } else {
+        sleep(3500).then(() => this.props.clearErrors())
+
+      }
     }
   }
 

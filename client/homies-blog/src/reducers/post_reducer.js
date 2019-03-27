@@ -1,10 +1,11 @@
-import { LOAD_USER_POSTS, CREATE_POST, UPLOAD_IMAGE } from '../actions'
+import { LOAD_USER_POSTS, CREATE_POST, UPLOAD_IMAGE, LOADING } from '../actions'
 
 const initialState = {
   userPosts: {},
   friendPosts: {},
   singlePost: {},
-  isUploading: false
+  isUploading: false,
+  isLoading: false,
 }
 
 export default (state = initialState, action) => {
@@ -18,12 +19,20 @@ export default (state = initialState, action) => {
       return {
         ...state,
         isUploading: false,
+        isLoading: false,
         userPosts: [...Array.from(state.userPosts), action.payload]
       }
     case UPLOAD_IMAGE:
       return {
         ...state,
         isUploading: true
+      }
+
+    case LOADING:
+      return {
+        ...state,
+        isUploading: false,
+        isLoading: true
       }
     default:
       return state;
