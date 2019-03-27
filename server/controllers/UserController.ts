@@ -1,13 +1,13 @@
 import * as bcrypt from 'bcryptjs';
-import * as jwt from 'jsonwebtoken';
-import { Response, Request, NextFunction } from 'express';
-import { BAD_REQUEST, UNAUTHORIZED, ACCEPTED } from 'http-status-codes';
-import { BaseController } from './base';
+import { NextFunction, Request, Response } from 'express';
+import { ACCEPTED, BAD_REQUEST, UNAUTHORIZED } from 'http-status-codes';
 import { UserRequestInterface } from '../common/types';
+import { signJWT } from '../utils/jwt';
+import { BaseController } from './base';
+import { setCacheJWT, getAsync } from '../utils/redis';
 
-const ONE_DAY = 84600;
 
-//todo: fix try catches, remove more stuff from payload
+//todo: fix try catches
 export class UserController extends BaseController {
 
     public whoIs = async (req: UserRequestInterface, res: Response, next: NextFunction) => {
@@ -46,9 +46,9 @@ export class UserController extends BaseController {
     */
     public login = async (req: Request, res: Response, next: NextFunction) => {
         const { email, password } = req.body;
-        const user = await this.db.user.findOne({ email })
+        const user = await this.db.user.findOne({ email });
         if (!user) {
-            res.status(404).json({ error: 'user not found' })
+            res.status(404).json({ error: 'user not found' });
         }
         const matching = await bcrypt.compare(password, user.password)
             .catch((err: any) => {
@@ -57,12 +57,10 @@ export class UserController extends BaseController {
         if (!matching) {
             return res.status(BAD_REQUEST).json({ error: 'password invalid' });
         }
-        const payload: object = {
-            id: user.id
-        };
-        const token: string = await jwt.sign(payload, 'secretsecret', {
-            expiresIn: ONE_DAY
-        });
+        const token: string = await signJWT(user.id, user.username);
+        await setCacheJWT(user.id, token)
+            .catch(err => console.error(err));
+        console.log(await getAsync(`${user.id}#JWT`));
         res.json({
             success: true,
             token: `Bearer ${token}`
@@ -85,7 +83,7 @@ export class UserController extends BaseController {
             // Save new password in DB
             const hashedNewPassword = await this._hashPassword(newPassword)
             await this.db.user.update(id, { password: hashedNewPassword });
-            res.status(ACCEPTED).json(user)
+            res.status(ACCEPTED).json(user);
         } catch (err) {
             res.status(UNAUTHORIZED).json({ error: 'invalid auth' });
             next(err);
@@ -98,7 +96,7 @@ export class UserController extends BaseController {
     }
 
     private _hashPassword = async (password: string): Promise<string> => {
-        const SALT_ROUNDS: number = 12;
+        const SALT_ROUNDS = 12;
         try {
             const salt: string = await bcrypt.genSalt(SALT_ROUNDS);
             const hashWord: string = await bcrypt.hash(password, salt);

@@ -1,17 +1,18 @@
-import * as passport from 'passport'
-import { Request, Response, NextFunction, Router } from 'express';
-import { UserController } from '../controllers/UserController';
+import { NextFunction, Request, Response, Router } from 'express';
 import { check, validationResult } from 'express-validator/check';
 import { sanitizeBody } from 'express-validator/filter';
+import * as passport from 'passport'
 import { UserRequestInterface } from '../common/types';
+import { UserController } from '../controllers/UserController';
 
 const router = Router();
 const user = new UserController();
 
 // Get current user
-router.get('/', passport.authenticate('jwt', { session: false }), (req: UserRequestInterface, res: Response, next: NextFunction) => {
-    user.whoIs(req, res, next);
-});
+router.get('/', passport.authenticate('jwt', { session: false }),
+    (req: UserRequestInterface, res: Response, next: NextFunction) => {
+        user.whoIs(req, res, next);
+    });
 
 // Create Account
 router.post('/signup', [
@@ -75,7 +76,11 @@ router.patch('/', [
     user.changePassword(req, res, next);
 })
 
-//TODO: James
-// Change Birthday
+//TODO:
+// Change birthday
+// Add profile pic
+// Add about me section
+// Patch profile pic
+// 
 
 export default router;

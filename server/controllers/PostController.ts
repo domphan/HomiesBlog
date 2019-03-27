@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { BAD_REQUEST } from 'http-status-codes';
 import { pick } from 'lodash';
 import * as Url from 'url-parse';
-import { s3, upload } from '../services/aws_s3';
+import { s3, upload } from '../utils/aws_s3';
 import { BaseController } from './base';
 import { PostPatchInterface, UploadRequest } from '../common/types';
 
