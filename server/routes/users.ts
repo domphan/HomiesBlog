@@ -51,7 +51,6 @@ router.post('/login', [
     check('password')
         .isLength({ min: 6 })
 ], (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.body.username, req.body.password);
     const errors: any = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
@@ -75,6 +74,11 @@ router.patch('/', [
     }
     user.changePassword(req, res, next);
 })
+
+router.delete('/:id', passport.authenticate('jwt', { session: false }),
+    (req: Request, res: Response, next: NextFunction) => {
+        user.deleteAccount(req, res, next);
+    });
 
 //TODO:
 // Change birthday

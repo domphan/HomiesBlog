@@ -12,7 +12,7 @@ export const signJWT = (uuid, username) => {
         },
         'secretsecret',
         { expiresIn: ONE_WEEK }
-    );
+    )
 };
 
 /**
