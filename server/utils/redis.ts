@@ -26,6 +26,13 @@ export const delAsync = async (key: string) => await delAsyncHelper(`${key}`);
 export const setAsync = async (key: string, value: string) =>
     await setAsyncHelper(`${key}`, `${value}`);
 
+/**
+ * 
+ * My strategy on login is to check if a JWT already exists in cache
+ * If so, assign that to client
+ * else, write to cache the new JWT
+ * 
+ */
 export const setCacheJWT = async (uuid: number, newJWT: string) => {
     const value = JSON.stringify(newJWT);
     const key = `${uuid}#JWT`;

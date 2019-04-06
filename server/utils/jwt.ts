@@ -17,7 +17,7 @@ export const signJWT = (uuid, username) => {
 
 /**
  * This jwt token refresh taken from https://gist.github.com/ziluvatar/a3feb505c4c0ec37059054537b38fc48
- * It's used to refresh tokens before expiry on Redis
+ * It's used to refresh tokens before expiry
  */
 
 

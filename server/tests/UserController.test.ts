@@ -77,6 +77,34 @@ describe('signUp with duplicate credentials', () => {
     })
 })
 
+describe('changing the password with the wrong password', () => {
+    test('should respond with 401 unauthorized', async () => {
+        let token = await getJWT();
+        const response = await request(app)
+            .patch('/api/users')
+            .set('Authorization', token)
+            .send({
+                oldPassword: 'wrongoldpassword',
+                newPassword: 'newpass'
+            })
+        expect(response.statusCode).toBe(401);
+    })
+})
+
+describe('changing the password with the correct password', () => {
+    test('should respond with 401 unauthorized', async () => {
+        let token = await getJWT();
+        const response = await request(app)
+            .patch('/api/users')
+            .set('Authorization', token)
+            .send({
+                oldPassword: 'poopoo',
+                newPassword: 'poopoo'
+            })
+        expect(response.statusCode).toBe(202);
+    })
+})
+
 
 describe('Deleting user', () => {
     test('Should respond with 204', async () => {

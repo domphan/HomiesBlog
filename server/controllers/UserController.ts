@@ -74,22 +74,23 @@ export class UserController extends BaseController {
     const { oldPassword, newPassword } = req.body;
     const { id } = req.user[0];
     // Check if oldPassword matches
-    try {
-      const user = await this.db.user.findOne({ id });
-      const matching = await bcrypt.compare(oldPassword, user.password)
-
-      if (!matching) {
-        // If it doesn't, send back error
-        return res.status(UNAUTHORIZED).json({ error: 'old password not valid' });
-      }
-      // Save new password in DB
-      const hashedNewPassword = await this._hashPassword(newPassword)
-      await this.db.user.update(id, { password: hashedNewPassword });
-      res.status(ACCEPTED).json(user);
-    } catch (err) {
-      res.status(UNAUTHORIZED).json({ error: 'invalid auth' });
-      next(err);
+    const user = await this.db.user.findOne({ id })
+      .catch(err => next(err));
+    if (!user) {
+      return res.status(NOT_FOUND).json({ error: 'user not found' });
     }
+    const matching = await bcrypt.compare(oldPassword, user.password)
+      .catch(err => next(err));
+    if (!matching) {
+      // If it doesn't, send back error
+      return res.status(UNAUTHORIZED).json({ error: 'old password not valid' });
+    }
+    // Save new password in DB
+    const hashedNewPassword = await this._hashPassword(newPassword)
+      .catch(err => next(err));
+    await this.db.user.update(id, { password: hashedNewPassword })
+      .catch(err => next(err));
+    res.status(ACCEPTED).json(user);
   }
 
   public deleteAccount = async (req: Request, res: Response, next: NextFunction) => {
