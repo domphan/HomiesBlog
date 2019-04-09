@@ -1,17 +1,18 @@
-import * as passport from 'passport'
-import { Request, Response, NextFunction, Router } from 'express';
-import { UserController } from '../controllers/UserController';
+import { NextFunction, Request, Response, Router } from 'express';
 import { check, validationResult } from 'express-validator/check';
 import { sanitizeBody } from 'express-validator/filter';
+import * as passport from 'passport'
 import { UserRequestInterface } from '../common/types';
+import { UserController } from '../controllers/UserController';
 
 const router = Router();
 const user = new UserController();
 
 // Get current user
-router.get('/', passport.authenticate('jwt', { session: false }), (req: UserRequestInterface, res: Response, next: NextFunction) => {
-    user.whoIs(req, res, next);
-});
+router.get('/', passport.authenticate('jwt', { session: false }),
+    (req: UserRequestInterface, res: Response, next: NextFunction) => {
+        user.whoIs(req, res, next);
+    });
 
 // Create Account
 router.post('/signup', [
@@ -50,7 +51,6 @@ router.post('/login', [
     check('password')
         .isLength({ min: 6 })
 ], (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.body.username, req.body.password);
     const errors: any = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
@@ -75,7 +75,16 @@ router.patch('/', [
     user.changePassword(req, res, next);
 })
 
-//TODO: James
-// Change Birthday
+router.delete('/:id', passport.authenticate('jwt', { session: false }),
+    (req: Request, res: Response, next: NextFunction) => {
+        user.deleteAccount(req, res, next);
+    });
+
+//TODO:
+// Change birthday
+// Add profile pic
+// Add about me section
+// Patch profile pic
+// 
 
 export default router;

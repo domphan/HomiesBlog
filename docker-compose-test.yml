@@ -2,32 +2,31 @@ version: '3.2'
 services:
   redis:
     image: redis
-    container_name: redis-cache
+    container_name: test_redis-cache
     ports:
       - "6379:6379"
     volumes:
-      - ../data/redis:/data
+      - ../data/redis:/test_data
     entrypoint:
       redis-server --appendonly yes
     restart: always
+
   postgres:
     image: postgres:latest
-    volumes:
-      - ./postgres-data:/var/lib/postgresql/data
-    container_name: "typeorm-postgres"
+    container_name: "test_typeorm-postgres"
     ports:
       - "5432:5432"
     environment:
       POSTGRES_USER: "DominicPhan"
       POSTGRES_PASSWORD: "poopoo"
-      POSTGRES_DB: "homies_blog"
+      POSTGRES_DB: "test_homies_blog"
     restart: always
   
   backend:
-    container_name: hblog_backend
+    container_name: test_hblog_backend
     build:
       context: .
-      dockerfile: ./server/dockerfile
+      dockerfile: ./server/dockerfileTest
     ports:
       - '3001:3001'
     volumes:
@@ -39,5 +38,5 @@ services:
       - postgres
       - redis
     environment:
-      - REDIS_URL=redis://redis-cache
-      - PG_NAME=homies_blog
+      - REDIS_URL=redis://test_redis-cache
+      - PG_NAME=test_homies_blog

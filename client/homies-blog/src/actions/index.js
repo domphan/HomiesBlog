@@ -6,3 +6,4 @@ export const CLEAR_ERRORS = 'clear_errors';
 export const LOAD_USER_POSTS = 'load_user_posts';
 export const CREATE_POST = 'create_post';
 export const UPLOAD_IMAGE = 'upload_img';
+export const LOADING = 'loading';

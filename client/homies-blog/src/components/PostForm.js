@@ -152,7 +152,7 @@ class PostForm extends Component {
               </MediaContainer>
             </Grid>
             <div className="buttons">
-              {post.isUploading ? <LinearProgress /> : <Button variant="contained" type="submit" color="primary" disabled={submitting}>
+              {post.isLoading ? <LinearProgress /> : <Button variant="contained" type="submit" color="primary" disabled={submitting}>
                 Submit
               </Button>}
             </div>

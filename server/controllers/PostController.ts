@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { BAD_REQUEST } from 'http-status-codes';
 import { pick } from 'lodash';
 import * as Url from 'url-parse';
-import { s3, upload } from '../services/aws_s3';
+import { s3, upload } from '../utils/aws_s3';
 import { BaseController } from './base';
 import { PostPatchInterface, UploadRequest } from '../common/types';
 
@@ -11,7 +11,7 @@ export class PostController extends BaseController {
     public CDN_URL = 'https://d34odhoqqlkyny.cloudfront.net';
 
     public createPost = async (req: Request, res: Response, next: NextFunction) => {
-        const user = await this.db.user.findOneOrFail(req.user[0].id)
+        const user = await this.db.user.findOneOrFail(req.user)
             .catch((err: any) => {
                 res.status(BAD_REQUEST).json({ error: 'user doesn\'t exist' });
             });
@@ -24,7 +24,7 @@ export class PostController extends BaseController {
     }
 
     public getAllPostsFromUser = async (req: Request, res: Response, next: NextFunction) => {
-        const userId = req.user[0].id;
+        const userId = req.user;
         const posts = await this.db.post.createQueryBuilder('post')
             .orderBy('post.createdAt', 'DESC')
             .leftJoinAndSelect('post.user', 'user')
@@ -63,7 +63,7 @@ export class PostController extends BaseController {
     }
 
     public updatePost = async (req: Request, res: Response, next: NextFunction) => {
-        const userId = req.user[0].id;
+        const userId = req.user;
         const owner = await this.db.post.createQueryBuilder('post')
             .leftJoinAndSelect('post.user', 'user')
             .where('user.id = :id', { id: userId })

@@ -9,10 +9,12 @@
         "new-parens": true,
         "no-unused-variable": true,
         "no-inferrable-types": true,
+        "no-default-import": false,
         "no-arg": true,
         "no-bitwise": true,
         "semicolon": true,
         "no-conditional-assignment": true,
+        "no-require-imports": true,
         "quotemark": [
             true,
             "single"
