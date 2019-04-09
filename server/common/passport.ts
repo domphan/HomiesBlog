@@ -38,15 +38,14 @@ export const passportStrategy = (passport) => {
     options.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
     options.secretOrKey = 'secretsecret';
     options.passReqToCallback = true;
-    const user: Repository<User> = getConnection().getRepository(User);
 
     passport.use(new JWTStrategy(options, async (req, jwtPayload, done) => {
         try {
             const jwtFromReq: string = req.headers.authorization.replace('Bearer ', '');
-            const foundUser: User[] = await user.findByIds(jwtPayload.id);
-            const verified: boolean = await verifyJWTFromCache(foundUser[0].id, jwtFromReq);
+            console.log(jwtPayload.id)
+            const verified: boolean = await verifyJWTFromCache(jwtPayload.id, jwtFromReq);
             if (verified) {
-                return done(null, foundUser);
+                return done(null, jwtPayload.id);
             }
             return done(null, false);
         } catch (err) {

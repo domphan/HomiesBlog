@@ -11,7 +11,7 @@ import { setCacheJWT, getAsync } from '../utils/redis';
 export class UserController extends BaseController {
 
   public whoIs = async (req: UserRequestInterface, res: Response, next: NextFunction) => {
-    const user = await this.db.user.findOne(req.user[0].id)
+    const user = await this.db.user.findOne(req.user)
       .catch(err => next(err));
     res.json(user);
   }
@@ -72,9 +72,9 @@ export class UserController extends BaseController {
 
   public changePassword = async (req: Request, res: Response, next: NextFunction) => {
     const { oldPassword, newPassword } = req.body;
-    const { id } = req.user[0];
+    const id = req.user;
     // Check if oldPassword matches
-    const user = await this.db.user.findOne({ id })
+    const user = await this.db.user.findOne({ id: req.user })
       .catch(err => next(err));
     if (!user) {
       return res.status(NOT_FOUND).json({ error: 'user not found' });
