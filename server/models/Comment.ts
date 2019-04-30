@@ -13,10 +13,10 @@ export class Comment extends Timestamp {
     @Column('text')
     public textContent: string
 
-    @ManyToOne(type => User, user => user.comments)
+    @ManyToOne(type => User, user => user.comments, { onDelete: 'CASCADE' })
     public user: User
 
-    @ManyToOne(type => Post, post => post.comments)
+    @ManyToOne(type => Post, post => post.comments, { onDelete: 'CASCADE' })
     public post: Post
 
 }

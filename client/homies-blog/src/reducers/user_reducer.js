@@ -1,4 +1,4 @@
-import { SET_USER, LOAD_USER_INFO } from '../actions';
+import { SET_USER, LOAD_USER_INFO, LOADING } from '../actions';
 import { isEmpty } from 'lodash';
 
 const initialState = {
@@ -14,10 +14,16 @@ export default (state = initialState, action) => {
         authenticated: !isEmpty(action.payload),
         user: action.payload
       }
+    case LOADING:
+      return {
+        ...state,
+        isLoading: true
+      }
     case LOAD_USER_INFO:
       return {
         ...state,
-        userinfo: action.payload
+        userinfo: action.payload,
+        isLoading: false
       }
     default:
       return state;

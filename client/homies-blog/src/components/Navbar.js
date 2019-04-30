@@ -98,6 +98,7 @@ class Navbar extends Component {
   }
 
   renderNavItems = () => {
+    const { user } = this.props.user;
     return (
       <Grid
         item lg
@@ -107,11 +108,11 @@ class Navbar extends Component {
           indicatorColor='secondary'
           centered
         >
-          <Link to='/' onClick={() => this.handleClick(0)}>
+          <Link to={`/profile/${user.username}`} onClick={() => this.handleClick(0)}>
             <StyledTab label='Profile' />
           </Link>
           <Link to='/test' onClick={() => this.handleClick(1)}>
-            <StyledTab label='Test' />
+            <StyledTab label='Friends' />
           </Link>
           <Link to='/feed' onClick={() => this.handleClick(2)}>
             <StyledTab label='Feed' />

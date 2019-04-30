@@ -14,3 +14,5 @@ export { default as Footer } from './Footer'
 export { default as PopperContainer } from './PopperContainer';
 export { default as PostMenu } from './PostMenu';
 export { default as EditModal } from './EditModal';
+export { default as ProfilePage } from './ProfilePage';
+export { default as ProfileText } from './ProfileText';

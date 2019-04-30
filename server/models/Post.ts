@@ -8,7 +8,7 @@ export class Post extends Timestamp {
     @PrimaryGeneratedColumn('uuid')
     public id: string;
 
-    @ManyToOne(type => User, user => user.posts)
+    @ManyToOne(type => User, user => user.posts, { onDelete: 'CASCADE' })
     @JoinColumn({ name: 'userId' })
     public user: User;
 

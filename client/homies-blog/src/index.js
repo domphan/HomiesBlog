@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { HomePage, BlogFeed, Navbar, SignupForm, LoginForm, PopperContainer } from './components';
+import { HomePage, BlogFeed, Navbar, SignupForm, LoginForm, PopperContainer, ProfilePage } from './components';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
@@ -47,15 +47,11 @@ ReactDOM.render(
         <div>
           <Navbar />
           <PopperContainer />
-          {/* <Events /> */}
           <Switch>
             <Route path='/login' component={LoginForm} />
             <Route path='/signup' component={SignupForm} />
-            {/* <Route path='/test' component={EditModal} /> */}
-            <Route path="/feed" component={BlogFeed} />
-            <Route path="/" component={HomePage} />
+            <Route path='/profile/:username' component={ProfilePage} />
           </Switch>
-          {/* <Footer /> */}
         </div>
       </BrowserRouter>
     </Provider>

@@ -48,7 +48,7 @@ export class PostController extends BaseController {
         let s3DeleteFlag = false;
         const post = await this.db.post.findOneOrFail(req.params.id)
             .catch((err: any) => res.status(BAD_REQUEST).json({ error: 'post doesn\'t exist' }));
-        if (post.mediaUrl.includes(this.CDN_URL)) {
+        if (post.mediaUrl && post.mediaUrl.includes(this.CDN_URL)) {
             s3DeleteFlag = true;
         }
         await this.db.post.delete(post.id)

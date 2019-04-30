@@ -1,6 +1,7 @@
-import { BaseEntity, Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BaseEntity, Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn, JoinTable } from 'typeorm';
 import { Timestamp } from './AbstractTimestamp';
 import { Comment, Post } from './';
+import { UserRelationship } from '.';
 
 @Entity()
 export class User extends Timestamp {
@@ -44,6 +45,7 @@ export class User extends Timestamp {
     @JoinColumn()
     public comments: Comment[];
 
-    @JoinColumn()
-    public friends: User[]
+    @OneToMany(type => UserRelationship, relationship => relationship.me)
+    @JoinTable({ name: 'user_relationships' })
+    public relationships: UserRelationship[];
 }

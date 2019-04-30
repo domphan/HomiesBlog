@@ -1,6 +1,7 @@
 import * as bcrypt from 'bcryptjs';
 import { NextFunction, Request, Response } from 'express';
 import { ACCEPTED, BAD_REQUEST, UNAUTHORIZED, CREATED, NOT_FOUND } from 'http-status-codes';
+import { pick } from 'lodash';
 import { UserRequestInterface } from '../common/types';
 import { signJWT } from '../utils/jwt';
 import { BaseController } from './base';
@@ -11,9 +12,19 @@ import { setCacheJWT, getAsync } from '../utils/redis';
 export class UserController extends BaseController {
 
   public whoIs = async (req: UserRequestInterface, res: Response, next: NextFunction) => {
-    const user = await this.db.user.findOne(req.user)
+    console.log('whoIs HIT')
+    const user = await this.db.user.findOne({ where: { username: req.params.username } })
       .catch(err => next(err));
-    res.json(user);
+    res.json(pick(user, [
+      'firstName',
+      'lastName',
+      'birthday',
+      'username',
+      'email',
+      'id',
+      'aboutMe',
+      'profilePic'
+    ]));
   }
 
   /*
@@ -94,16 +105,19 @@ export class UserController extends BaseController {
   }
 
   public deleteAccount = async (req: Request, res: Response, next: NextFunction) => {
-    const { id } = req.user[0];
+    const id = req.user;
     // Check that id matches the one in the query
+    console.log('delete hit');
+    console.log(id, req.params.id);
     if (id === req.params.id) {
       const user = await this.db.user.findOne({ id })
         .catch((err: any) => res.status(BAD_REQUEST).json({ error: 'user doesn\'t exist' }));
       await this.db.user.delete(user.id)
         .catch((err: any) => res.status(BAD_REQUEST).json({ error: 'unable to delete' }));
       return res.status(204).json({});
+    } else {
+      res.status(UNAUTHORIZED).send('unauthorized to make this delete');
     }
-    res.status(UNAUTHORIZED);
   }
 
 

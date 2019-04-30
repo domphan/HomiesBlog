@@ -8,8 +8,8 @@ import { UserController } from '../controllers/UserController';
 const router = Router();
 const user = new UserController();
 
-// Get current user
-router.get('/', passport.authenticate('jwt', { session: false }),
+// Get a user
+router.get('/:username', passport.authenticate('jwt', { session: false }),
     (req: UserRequestInterface, res: Response, next: NextFunction) => {
         user.whoIs(req, res, next);
     });
