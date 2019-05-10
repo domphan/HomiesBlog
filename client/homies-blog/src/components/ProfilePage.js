@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getUserInfo } from '../actions/user_actions';
-import { LinearProgress } from '@material-ui/core';
-import { ProfileText } from '.';
+import { LinearProgress, Grid } from '@material-ui/core';
+import { BlogFeed, ProfileText, ProfilePic, PostForm } from '.';
 
 class ProfilePage extends Component {
   componentDidMount() {
@@ -13,9 +13,19 @@ class ProfilePage extends Component {
     const { userinfo } = this.props.user;
     if (userinfo) {
       return (
-        <div>
-          <ProfileText userinfo={userinfo} />
-        </div>
+        <Grid container
+          justify='center'
+          spacing={16}
+          direction='row'
+          alignItems='center'
+        >
+          <Grid item>
+            <ProfilePic />
+          </Grid>
+          <Grid item>
+            <ProfileText userinfo={userinfo} />
+          </Grid>
+        </Grid>
       )
     } else {
       return (
@@ -30,6 +40,7 @@ class ProfilePage extends Component {
     return (
       <div>
         {user.isLoading ? <LinearProgress /> : this.renderContent()}
+        <BlogFeed />
       </div>
     );
   }

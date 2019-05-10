@@ -2,16 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 
 
-const StyledDiv = styled.div`
-  height: 25%;
-`;
-
 export default (props) => {
   const { userinfo } = props;
   return (
-    <StyledDiv>
-      <h4>{userinfo.username}</h4>
+    <div>
+      <h5>{userinfo.username}</h5>
       <b>{userinfo.firstName} {userinfo.lastName}</b>
-    </StyledDiv>
+      <p>{userinfo.aboutme}</p>
+    </div>
   );
 }

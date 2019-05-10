@@ -1,6 +1,6 @@
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
-import { GET_ERRORS, SET_USER, SET_ERRORS, LOAD_USER_INFO, CLEAR_ERRORS, LOADING } from '.';
+import { GET_ERRORS, SET_USER, SET_ERRORS, LOAD_USER_INFO, CLEAR_ERRORS, USER_LOADING } from '.';
 
 const URL = 'http://localhost:3001';
 
@@ -76,7 +76,7 @@ export const clearErrors = () => dispatch => {
 }
 
 export const getUserInfo = (username) => async dispatch => {
-  dispatch({ type: LOADING })
+  dispatch({ type: USER_LOADING })
   let response = await axios.get(`${URL}/api/users/${username}`)
     .catch(err => {
       if (err.response.data !== 'Unauthorized') {

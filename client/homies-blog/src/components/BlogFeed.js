@@ -8,8 +8,8 @@ import { isEmpty } from 'lodash';
 
 const StyledGrid = styled(Grid)`
   display: flex;
-  justify-content: center;
-  flex-direction: column;
+  justify-content: flex-start;
+  flex-direction: row;
 `
 
 class BlogFeed extends Component {
@@ -19,7 +19,7 @@ class BlogFeed extends Component {
   renderPosts() {
     return Array.from(this.props.post.userPosts).map((post) => {
       return (
-        <Grid item lg='auto' xs={3}>
+        <Grid item lg={4} xs='auto' >
           <BlogPost
             title={post.title}
             textContent={post.textContent}
@@ -35,8 +35,7 @@ class BlogFeed extends Component {
     return (
       <StyledGrid
         container
-        direction='column'
-        justify='center'
+        direction='row'
         spacing={16}
       >
         {!isEmpty(this.props.post) ? this.renderPosts() : ''}

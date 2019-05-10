@@ -8,7 +8,8 @@ import { PostPatchInterface, UploadRequest } from '../common/types';
 
 
 export class PostController extends BaseController {
-    public CDN_URL = 'https://d34odhoqqlkyny.cloudfront.net';
+    public CDN_URL = 'https://d3n6cwbwt93k0p.cloudfront.net';
+    public IMAGE_DIMS = '?d=480x480'
 
     public createPost = async (req: Request, res: Response, next: NextFunction) => {
         const user = await this.db.user.findOneOrFail(req.user)
@@ -16,7 +17,12 @@ export class PostController extends BaseController {
                 res.status(BAD_REQUEST).json({ error: 'user doesn\'t exist' });
             });
         const { title, textContent, mediaUrl } = req.body;
-        const options = { title, textContent, mediaUrl, user };
+        const options = { 
+            title, 
+            textContent, 
+            mediaUrl: mediaUrl + this.IMAGE_DIMS, 
+            user 
+        };
         const post = await this.db.post.create(options);
         const newPost = await this.db.post.save(post)
             .catch((err: any) => res.status(BAD_REQUEST).json({ error: 'failed to create post' }));

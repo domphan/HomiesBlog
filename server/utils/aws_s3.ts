@@ -1,5 +1,4 @@
 import * as aws from 'aws-sdk';
-import * as fs from 'fs';
 import * as multer from 'multer';
 import * as multerS3 from 'multer-s3';
 import * as nconf from 'nconf';
@@ -22,11 +21,12 @@ export const upload = multer({
         s3: s3,
         bucket: 'homiesblogbucket',
         acl: 'public-read',
+        contentType: multerS3.AUTO_CONTENT_TYPE,
         metadata: (req, file, cb) => {
             cb(null, { fieldName: file.fieldname });
         },
         key: (req, file, cb) => {
-            cb(null, Date.now().toString())
+            cb(null, `${Date.now().toString()}.jpg`)
         }
     })
 });

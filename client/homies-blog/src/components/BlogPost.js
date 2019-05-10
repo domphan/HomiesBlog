@@ -19,7 +19,7 @@ const StyledMedia = styled(CardMedia)`
 const StyledCard = styled(Card)`
   margin: auto;
   margin-bottom: 10px;
-  max-width: 800px;
+  max-width: 1200px;
   padding: 1%;
 `;
 
@@ -61,7 +61,6 @@ export const BlogPost = (props) => {
         </Typography>
       </CardContent>
     </StyledCard>
-
   )
 
 }
