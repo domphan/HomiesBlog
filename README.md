@@ -29,7 +29,7 @@ Visit the webapp on localhost:3000, use the API on localhost:3001
 * Express backend written in Typescript
 * PostgreSQL database with TypeORM
 * React-Redux with Material-UI
-* AWS Cloudfront and S3 for image storage and CDN
+* AWS Cloudfront and S3 for image storage and CDN w/ image resizing on the fly with a Lambda function
 
 
 
