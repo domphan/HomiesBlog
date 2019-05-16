@@ -132,7 +132,7 @@ class PostForm extends Component {
                   {({ input, meta }) => (
                     <Dropzone
                       accept="image/*"
-                      maxSize="15000000"
+                      maxSize={15000000}
                       onDrop={acceptedFiles => this.setState({ fileUpload: acceptedFiles })}>
                       {({ getRootProps, getInputProps }) => (
                         <section>

@@ -17,9 +17,11 @@ class BlogFeed extends Component {
     this.props.loadUserPosts();
   }
   renderPosts() {
+    let i = 0;
     return Array.from(this.props.post.userPosts).map((post) => {
+      i++;
       return (
-        <Grid item lg={4} xs='auto' >
+        <Grid item lg={4} xs='auto' key={i} >
           <BlogPost
             title={post.title}
             textContent={post.textContent}

@@ -132,7 +132,7 @@ class Navbar extends Component {
               direction='row'
               alignItems='center'
               justify='center'
-              lg={12}
+              
             >
 
               <Grid item lg>
