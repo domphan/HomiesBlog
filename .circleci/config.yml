@@ -42,4 +42,4 @@ jobs:
       - run:
           name: run service
           command: |
-            docker-compose up
+            docker-compose -f docker-compose-ci.yml up
