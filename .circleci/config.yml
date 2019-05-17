@@ -16,7 +16,7 @@ jobs:
       - run:
           name: Install curl
           command: |
-            apt update && apt-get install curl
+            apt update && apt-get --yes --force-yes install curl
 
 
       - run:
