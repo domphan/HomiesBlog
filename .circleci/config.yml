@@ -35,6 +35,11 @@ jobs:
             curl -L https://github.com/docker/compose/releases/download/1.11.2/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
             chmod +x /usr/local/bin/docker-compose
       - run:
-          name: Build service and run
+          name: Build service
           command: |
             docker-compose -f docker-compose-ci.yml up -d
+
+      - run:
+          name: run service
+          command: |
+            docker-compose up
