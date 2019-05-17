@@ -37,9 +37,7 @@ jobs:
       - run:
           name: Build service
           command: |
-            pwd
-            ls
-            docker-compose build docker-compose-ci.yml
+            docker-compose build -f docker-compose-ci.yml
 
       - run:
           name: Start container and verify it's working
