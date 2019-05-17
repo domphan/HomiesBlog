@@ -9,6 +9,8 @@ jobs:
           POSTGRES_PASSWORD: "poopoo"
           POSTGRES_DB: "homies_blog"
       - image: circleci/node:latest
+  working_directory: ~/project
+    
     steps:
       - checkout
 
