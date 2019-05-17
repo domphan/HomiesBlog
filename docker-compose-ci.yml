@@ -23,7 +23,7 @@ services:
     container_name: hblog_backend
     build:
       context: .
-      dockerfile: ./server/dockerfile
+      dockerfile: ./server/dockerfile-ci
     ports:
       - '3001:3001'
     depends_on:
