@@ -39,7 +39,7 @@ jobs:
           command: |
             pwd
             ls
-            docker-compose build
+            docker-compose build docker-compose-ci.yml
 
       - run:
           name: Start container and verify it's working
