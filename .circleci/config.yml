@@ -1,7 +1,14 @@
 version: 2.1
 jobs:
   build:
-
+    docker:
+      - image: circleci/redis:latest
+      - image: circleci/postgres:latest
+        environment:
+          POSTGRES_USER: "DominicPhan"
+          POSTGRES_PASSWORD: "poopoo"
+          POSTGRES_DB: "homies_blog"
+      - image: circleci/node:latest
     steps:
       - checkout
 
