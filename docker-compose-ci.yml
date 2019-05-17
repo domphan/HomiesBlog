@@ -1,0 +1,36 @@
+version: '3.0'
+services:
+  redis:
+    image: redis
+    container_name: redis-cache
+    ports:
+      - "6379:6379"
+    entrypoint:
+      redis-server --appendonly yes
+    restart: always
+  postgres:
+    image: postgres:latest
+    container_name: "typeorm-postgres"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: "DominicPhan"
+      POSTGRES_PASSWORD: "poopoo"
+      POSTGRES_DB: "homies_blog"
+    restart: always
+  
+  backend:
+    container_name: hblog_backend
+    build:
+      context: .
+      dockerfile: ./server/dockerfile
+    ports:
+      - '3001:3001'
+    depends_on:
+      - postgres
+    links:
+      - postgres
+      - redis
+    environment:
+      - REDIS_URL=redis://redis-cache
+      - PG_NAME=homies_blog
